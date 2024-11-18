@@ -1,0 +1,34 @@
+<form [formGroup]="loginForm" (ngSubmit)="onUserLogin()">
+
+    <label>Please Enter your username :  </label><br><br>
+    <input type="text" formControlName="username" required/><br><br>
+    @if (username?.invalid && (username?.dirty || username?.touched)) 
+    {
+        @if (username?.hasError('required')) {
+            username is required
+        }
+        @if (username?.hasError('minlength')) {
+            username must be at least 5 charcters long.
+        }
+    }<br><br>
+
+    <label>Please Enter your password : </label><br><br>
+    <input type="password" formControlName="password" required/><br><br>
+    @if (password?.invalid && (username?.dirty || username?.touched)) 
+    {
+        @if(password?.hasError('required'))
+        {
+            password is required.
+        }
+        @if(password?.hasError('minLength'))
+        {
+             password must be at least 6 charcters long.
+        }
+        @if (password?.hasError('pattern')) 
+        {
+            Password must at least contain one upper alphabet, one lower alphabet and one symbol and one numeric value.
+        }
+    }<br><br>
+
+    <button type="submit">Submit</button>
+</form>
