@@ -1,2 +1,53 @@
 <a routerLink="/riders">Goto Riders home page</a>
-<p>rider-create works!</p>
+
+<h1>Create a Rider Here :</h1>
+
+<form [formGroup]="riderCreationForm" (ngSubmit)="onRiderCreate()">
+  <label>Enter your first Name : </label>
+  <input type="text" formControlName="firstName" required /><br /><br />
+  @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
+  @if(firstName?.hasError('required')) { <i>firstName is required</i> }
+  @if(firstName?.hasError('minlength')) { First name must be 5 characters long.
+  } }<br><br>
+
+  <label>Enter your last name : </label>
+  <input type="text" formControlName="lastName" required /><br /><br />
+  @if (lastName?.invalid && (lastName?.dirty || lastName?.touched)) {
+  @if(lastName?.hasError('required')) { lastName is required }
+  @if(lastName?.hasError('minlength')) { lastName must be 5 characters long. } }<br><br>
+
+  <label>Enter your phone number : </label>
+  <input type="tel" formControlName="phoneNumber" required /><br /><br />
+  @if (phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)) {
+  @if(phoneNumber?.hasError('required')) { phoneNumber is required }
+  @if(phoneNumber?.hasError('minlength')) { phoneNumber must be 11 digits long.
+  } }<br><br>
+
+  <label>Enter Your Address : </label>
+  <input type="text" formControlName="address" /><br /><br />
+  @if (address?.invalid && (address?.dirty || address?.touched)) {
+  @if(address?.hasError('required')) { address is required }
+  @if(address?.hasError('maxlength')) { address max is 50 characters . } }<br><br>
+
+  <label>Enter your Sector : </label>
+  <input type="text" formControlName="sector" /><br /><br />
+  @if (sector?.invalid && (sector?.dirty || sector?.touched)) {
+  @if(sector?.hasError('required')) { sector is required }
+  @if(sector?.hasError('maxlength')) { you cannot exceed 10 characters. } }<br><br>
+
+  <label>Enter your street : </label>
+  <input type="text" formControlName="street" /><br /><br />
+  @if (street?.invalid && (street?.dirty || street?.touched)) {
+  @if(street?.hasError('required')) { street is required }
+  @if(street?.hasError('minlength')) { Its too long! , try to make it short. } }<br><br>
+
+  <label>Enter you cnic number : </label>
+  <input type="text" formControlName="cnicNumber" /><br /><br />
+  @if (cnicNumber?.invalid && (cnicNumber?.dirty || cnicNumber?.touched)) {
+  @if(cnicNumber?.hasError('required')) { firstName is required }
+  @if(cnicNumber?.hasError('minlength')) { Your cnic should be 13 digit number.
+  } @if(cnicNumber?.hasError('pattern')) { Invalid CNIC format(sohuld be
+  1345-6789012-3) } }<br><br>
+
+  <button type="submit" [disabled]="riderCreationForm.invalid">Submit</button>
+</form>

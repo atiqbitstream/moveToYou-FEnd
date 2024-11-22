@@ -1,15 +1,13 @@
 <form [formGroup]="loginForm" (ngSubmit)="onUserLogin()">
 
-    <label>Please Enter your username :  </label><br><br>
-    <input type="text" formControlName="username" required/><br><br>
-    @if (username?.invalid && (username?.dirty || username?.touched)) 
+    <label>Please Enter your Email :  </label><br><br>
+    <input type="email" formControlName="email" required/><br><br>
+    @if (email?.invalid && (email?.dirty || email?.touched)) 
     {
-        @if (username?.hasError('required')) {
-            username is required
+        @if (email?.hasError('required')) {
+            email is required
         }
-        @if (username?.hasError('minlength')) {
-            username must be at least 5 charcters long.
-        }
+       
     }<br><br>
 
     <label>Please Enter your password : </label><br><br>
@@ -31,4 +29,9 @@
     }<br><br>
 
     <button type="submit">Submit</button>
-</form>
+</form><br>
+
+<button (click)="onCreateFakeUsers()">Create Fake Users</button><br><br>
+
+<!-- <button (click)="onDeleteFakeUsers()">Delete  All Fake Users</button> -->
+
