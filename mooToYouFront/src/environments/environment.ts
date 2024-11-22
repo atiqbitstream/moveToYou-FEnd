@@ -1,4 +1,5 @@
 export const environment = {
     production : false,
-    apiUrl : 'http://localhost:3000'
+    snbUrl : 'http://localhost:3000',
+    mtuUrl : 'http://localhost:3001'
 }

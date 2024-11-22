@@ -10,6 +10,16 @@ export class LoginService {
   constructor(private http: HttpClient) {}
 
   loginUser(newUserLogin:LoginRequest):Observable<LoginReponse> {
-    return this.http.post<LoginReponse>(`${environment.apiUrl}/auth/login`,newUserLogin);
+    return this.http.post<LoginReponse>(`${environment.snbUrl}/auth/login`,newUserLogin);
   }
+
+  fakeUsersCreation(payload:any)
+  {
+    return this.http.post(`${environment.snbUrl}/faker`,payload)
+  }
+
+  // deleteFakeUsersAll(payload:any)
+  // {
+  //    return this.http.delete(`${environment.snbUrl}/faker/deleteAll`,payload)
+  // }
 }
