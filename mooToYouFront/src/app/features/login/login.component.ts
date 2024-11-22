@@ -25,9 +25,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      username: new FormControl('', [
+      email: new FormControl('', [
         Validators.required,
-        Validators.minLength(5),
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/) // Regex for email validation
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -48,6 +48,11 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
+  get email()
+  {
+    return this.loginForm.get('email')
+  }
+
   onUserLogin() {
     if (this.loginForm.valid) {
       const loginRequest: LoginRequest = this.loginForm.value;
@@ -65,5 +70,33 @@ export class LoginComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  payload:any;
+
+  onCreateFakeUsers()
+  {
+    console.log("function createfakeusers called")
+    this.loginService.fakeUsersCreation(this.payload).subscribe({
+      next:(response)=>{
+        console.log(response);
+      },
+      error:(err)=>{
+        console.log("fake users creation error : ",err)
+      }
+    });
+    
+  }
+
+  onDeleteFakeUsers()
+  {
+    this.loginService.deleteFakeUsersAll(this.payload).subscribe({
+      next:(response)=>{
+        console.log("All fake users deleted successfully!",response);
+      },
+      error:(err)=>{
+        console.log("Fake users deletion Error : ",err)
+      }
+    })
   }
 }
