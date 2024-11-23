@@ -1,2 +1,36 @@
-<a routerLink="/riders">Goto Riders home page</a>
-<p>rider-list works!</p>
+<a routerLink="/riders">Goto Riders home page</a><br><br>
+
+<button (click)="toggleShowMyProfile()">show My Profile Only</button>
+
+<p>All the Riders are listed down Here : !</p><br><br>
+
+<table class="rider-table">
+    <thead>
+    <tr>
+        <th>firstName</th>
+        <th>lastName</th>
+        <th>phoneNumber</th>
+        <th>address</th>
+        <th>Sector</th>
+        <th>Street</th>
+        <th>cnicNumber</th>
+        <th>isDeleted</th>
+    </tr>
+    </thead>
+    <tbody>
+        @for (rider of (showAllRiders ? riders:[currentRider]); track rider.id) {
+            <tr>
+                <td>{{rider.firstName}}</td>
+                <td>{{rider.lastName}}</td>
+                <td>{{rider.phoneNumber}}</td>
+                <td>{{rider.address}}</td>
+                <td>{{rider.sector}}</td>
+                <td>{{rider.street}}</td>
+                <td>{{rider.cnicNumber}}</td>
+                <td>{{rider.isDeleted}}</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
