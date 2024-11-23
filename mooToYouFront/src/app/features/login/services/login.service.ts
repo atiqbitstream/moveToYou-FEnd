@@ -18,8 +18,16 @@ export class LoginService {
     return this.http.post(`${environment.snbUrl}/faker`,payload)
   }
 
-  // deleteFakeUsersAll(payload:any)
-  // {
-  //    return this.http.delete(`${environment.snbUrl}/faker/deleteAll`,payload)
-  // }
+
+  getUserIdFromLocalStorage():number|null
+{
+  const authData = localStorage.getItem('authData');
+  if (authData) {
+    const parsedData = JSON.parse(authData);
+    return parsedData.user?.id || null; // Return the user id if present
+  }
+  return null;
 }
+}
+
+

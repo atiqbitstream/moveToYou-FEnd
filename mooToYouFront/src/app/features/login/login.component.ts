@@ -8,8 +8,9 @@ import {
 import { validateHeaderName } from 'http';
 import { LoginService } from './services/login.service';
 import { LoginRequest } from './interfaces/loginRequest.interface';
-import { response } from 'express';
+
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router:Router) {}
 
   loginForm!: FormGroup;
 
@@ -62,6 +63,8 @@ export class LoginComponent implements OnInit {
           console.log(response);
 
           localStorage.setItem('authData',JSON.stringify(response));
+
+          this.router.navigate(['/riders'])
         },
         error: (err) => {
           console.log('Login failed', err);
@@ -88,15 +91,5 @@ export class LoginComponent implements OnInit {
     
   }
 
-  onDeleteFakeUsers()
-  {
-    this.loginService.deleteFakeUsersAll(this.payload).subscribe({
-      next:(response)=>{
-        console.log("All fake users deleted successfully!",response);
-      },
-      error:(err)=>{
-        console.log("Fake users deletion Error : ",err)
-      }
-    })
-  }
+
 }
