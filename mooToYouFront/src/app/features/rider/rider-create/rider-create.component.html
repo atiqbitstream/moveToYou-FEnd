@@ -3,6 +3,14 @@
 <h1>Create a Rider Here :</h1>
 
 <form [formGroup]="riderCreationForm" (ngSubmit)="onRiderCreate()">
+
+  <label>Enter your user Name : </label>
+  <input type="text" formControlName="username" required /><br /><br />
+  @if (firstName?.invalid && (username?.dirty || username?.touched)) {
+  @if(username?.hasError('required')) { <i>username is required</i> }
+  @if(username?.hasError('minlength')) { username must be 5 characters long.
+  } }<br><br>
+
   <label>Enter your first Name : </label>
   <input type="text" formControlName="firstName" required /><br /><br />
   @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
@@ -48,6 +56,41 @@
   @if(cnicNumber?.hasError('minlength')) { Your cnic should be 13 digit number.
   } @if(cnicNumber?.hasError('pattern')) { Invalid CNIC format(sohuld be
   1345-6789012-3) } }<br><br>
+
+  <label>Enter you email : </label>
+  <input type="email" formControlName="email" /><br /><br />
+  @if (email?.invalid && (email?.dirty || email?.touched)) {
+  @if(email?.hasError('required')) { email is required }
+  @if(email?.hasError('minlength')) { Your email should be 13 digit number.
+  } @if(email?.hasError('pattern')) { Invalid email format(sohuld be userexample.com') } }<br><br>
+
+  <label>Please Enter your password : </label>
+  <input type="password" formControlName="password" required/><br><br>
+  @if (password?.invalid && (username?.dirty || username?.touched)) 
+  {
+      @if(password?.hasError('required'))
+      {
+          password is required.
+      }
+      @if(password?.hasError('minLength'))
+      {
+           password must be at least 6 charcters long.
+      }
+      @if (password?.hasError('pattern')) 
+      {
+          Password must at least contain one upper alphabet, one lower alphabet and one symbol and one numeric value.
+      }
+  }<br><br>
+
+  <label>Select The Role u want to give to User : </label>
+  <select formControlName="role">
+    <option value="">Select A Role</option>
+   @for (role of roles  ; track role) {
+    <option [value]="role">{{role}}</option>
+   }
+      
+   
+  </select><br><br>
 
   <button type="submit" [disabled]="riderCreationForm.invalid">Submit</button>
 </form>

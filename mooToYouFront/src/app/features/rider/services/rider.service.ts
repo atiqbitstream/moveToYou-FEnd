@@ -13,9 +13,9 @@ export class RiderService
 {
   constructor(private http:HttpClient, private loginService:LoginService){}
 
-  createRider(newRider:createRider):Observable<RiderCreateRes>
+  createAsRider(newRider:createRider):Observable<RiderCreateRes>
   {
-    return this.http.post<RiderCreateRes>(`${environment.mtuUrl}/rider/create`,newRider)
+    return this.http.post<RiderCreateRes>(`${environment.snbUrl}/user/createAsRider`,newRider)
   }
 
   getAllRiders():Observable<Rider[]>
