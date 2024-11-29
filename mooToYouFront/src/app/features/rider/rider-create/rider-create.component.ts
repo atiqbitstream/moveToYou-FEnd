@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { RiderService } from '../services/rider.service';
 import { createRider } from '../interfaces/riderCreate.interface';
 import { response } from 'express';
-import { ERole } from '../enums/roles.enum';
+import { ERole } from '../../shared/enums/roles.enum';
 import { CommonModule } from '@angular/common';
 
 @Component({

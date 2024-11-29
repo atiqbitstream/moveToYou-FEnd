@@ -3,7 +3,7 @@ import { isPlatformBrowser } from "@angular/common";
 import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
 import { inject, PLATFORM_ID } from "@angular/core";
 import { Observable } from "rxjs";
-import { TokenService } from "../../shared/token.service";
+import { TokenService } from "../../shared/services/token.service";
 import { Router } from "@angular/router";
 
 

@@ -1,4 +1,4 @@
-import { ERole } from "../enums/roles.enum";
+import { ERole } from "../../shared/enums/roles.enum";
 
 export interface RiderCreateRes {
   username:string;

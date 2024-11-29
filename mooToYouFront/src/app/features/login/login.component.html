@@ -1,3 +1,7 @@
+<div class="parentdiv">
+
+<div class="logindiv">
+
 <form [formGroup]="loginForm" (ngSubmit)="onUserLogin()">
 
     <label>Please Enter your Email :  </label><br><br>
@@ -31,7 +35,37 @@
     <button type="submit">Submit</button>
 </form><br>
 
-<button (click)="onCreateFakeUsers()">Create Fake Users</button><br><br>
 
-<!-- <button (click)="onDeleteFakeUsers()">Delete  All Fake Users</button> -->
+
+<button (click)="onCreateFakeUsers()">Create Fake Users</button><br><br>
+</div>
+
+<div class="quickCredentials">
+    <h3>Quick Login Credentials</h3>
+    <div>
+        <p><strong>Email:</strong> wazi&#64;gmail.com</p>
+        <p><strong>Password:</strong> Ab3!qz</p>
+       
+      </div>
+
+      <div >
+        <h4>Regular User</h4>
+        <p><strong>Email:</strong> atiq&#64;gmail.com</p>
+        <p><strong>Password:</strong> M7x&#64;rd</p>
+      </div>
+
+      <div>
+        <h4>Rider User</h4>
+        
+        <p><strong>Email:</strong> user&#64;gmail.com</p>
+        <p><strong>Password:</strong> Zt2$hp</p>
+     
+      </div>
+    
+
+    <button (click)="onCreateFakeUsers()">
+      create Fake Users
+    </button>
+</div>
+</div>
 
