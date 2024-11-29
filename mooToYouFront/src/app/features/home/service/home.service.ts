@@ -16,4 +16,19 @@ export class HomeService
     this.router.navigate(['']);
  
   }
+
+
+  getUserRole()
+  {
+   const storeduserData = localStorage.getItem('authData');
+
+   let userRole=''
+   if(storeduserData){
+   const parsedData=JSON.parse(storeduserData);
+   userRole = parsedData.user.role;
+   }
+
+   return userRole; 
+
+  }
 }
