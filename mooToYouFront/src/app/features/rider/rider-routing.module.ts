@@ -7,7 +7,8 @@ import { RiderListComponent } from './rider-list/rider-list.component';
 const routes: Routes = [
   {path:'',component:RiderComponent},
   {path:'create',component:RiderCreateComponent},
-  {path:'list',component:RiderListComponent}
+  {path:'list',component:RiderListComponent},
+ 
 ];
 
 @NgModule({
