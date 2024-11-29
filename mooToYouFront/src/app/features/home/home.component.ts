@@ -18,16 +18,13 @@ export class HomeComponent {
 
  readonly moduleRoutes = [
     {path:'/customers', label:'Go To Customers Module'},
-    {path:'/riders',label:'Go To Riders Module'}
+    {path:'/riders',label:'Go To Riders Module'},
+    {path:'', label:'Login Again'}
   ]
 
   onLogOut()
   {
-    this.homeService.logOut().subscribe({
-      next:(response)=>{
-        console.log("User successfully logged Out : ",response)
-      }
-    })
+    this.homeService.logOut();
   }
 
 
