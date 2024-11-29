@@ -1,1 +1,10 @@
-<p>home works!</p>
+<h1>Weclome To mooToYou Project</h1>
+
+<nav>
+    @for (route of moduleRoutes; track route.path) {
+        <a [routerLink]="route.path">{{route.label}}</a><br><br>
+    }
+</nav>
+    
+
+<button (click)="onLogOut()">Log Out</button>
