@@ -14,5 +14,13 @@ export class CustomerService
      return this.http.post<ICustomerCreation>(`${environment.mtuUrl}/customer/create`,newCustomer)
   }
 
+
+  fetchCustomersByOrganization(organizationId:number):Observable<any[]>
+  {
+     return this.http.get<any[]>(`${environment.mtuUrl}/customer/getAllCustomers`,{
+      params:{organizationId:organizationId}
+     })
+  }
+
   
 }

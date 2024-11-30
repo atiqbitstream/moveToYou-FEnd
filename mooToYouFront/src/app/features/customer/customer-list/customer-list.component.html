@@ -1,2 +1,49 @@
 <a routerLink="/home">Goto Home page</a>
-<p>customer-list works!</p>
+
+<h1>Choose Organization of Your choice To List All Customers : </h1>
+
+<label>Select you preferred Organization : </label>
+<select [formControl]="organizationId" (change)="onSendOrganizationId()">
+    <option value="">All Organizations</option>
+    <option value="1">Emaan Dairy</option>
+    <option value="2">New Dairy</option>
+</select>
+
+<table class="customer-table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Sector</th>
+            <th>Street</th>
+            <th>Google Pin</th>
+            <th>Home Picture</th>
+            <th>Organization</th>
+            <th>Status</th>
+            <th>Contract</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (customer of customers; track customer.id) 
+        {
+           <tr>
+            <td>{{customer.firstName}}</td>
+            <td>{{customer.lastName}}</td>
+            <td>{{customer.phoneNumber}}</td>
+            <td>{{customer.address}}</td>
+            <td>{{customer.sector}}</td>
+            <td>{{customer.street}}</td>
+            <td>{{customer.googlePin}}</td>
+            <td>{{customer.homePicture}}</td>
+            <td>{{customer.organization}}</td>
+            <td>{{customer.status}}</td>
+            <td>{{customer.contract}}</td>
+           </tr>
+        }
+    
+    </tbody>
+</table>
+
+

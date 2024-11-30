@@ -38,11 +38,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
         })
     }
 
-    if(tokenService.isTokenExpired())
-    {
-        tokenService.logOut();
-        router.navigate([''])
-    }
+    
 }
 
     return next(req);

@@ -1,0 +1,59 @@
+/* Styles for the "Goto customers" link */
+.goto-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+    transition: color 0.3s ease;
+  }
+  
+  .goto-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+  
+  /* Status Text */
+  .status-text {
+    font-size: 1.2rem;
+    color: #28a745;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styles */
+  .customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .customer-table th,
+  .customer-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .customer-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .customer-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .customer-table tr:hover {
+    background-color: #e9ecef;
+  }
+  
+  .customer-table td {
+    font-size: 0.9rem;
+  }
+  
+  /* Additional styling for text inside table cells */
+  .customer-table td,
+  .customer-table th {
+    font-family: 'Arial', sans-serif;
+  }
+  
