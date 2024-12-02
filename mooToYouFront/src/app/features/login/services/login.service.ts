@@ -25,14 +25,14 @@ export class LoginService {
   }
 
 
-  getUserIdFromLocalStorage():number|null
+  getUserIdFromLocalStorage()
 {
   const authData = localStorage.getItem('authData');
   if (authData) {
     const parsedData = JSON.parse(authData);
     return parsedData.user?.id || null; // Return the user id if present
   }
-  return null;
+  
 }
 }
 

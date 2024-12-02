@@ -7,25 +7,26 @@ import { RiderCreateRes } from "../interfaces/riderResponse.interface";
 import { Observable } from "rxjs";
 import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
+import { ApiService } from "../../shared/generics/api.service";
 
 @Injectable({providedIn:"root"})
 export class RiderService
 {
-  constructor(private http:HttpClient, private loginService:LoginService){}
+  constructor(private http:HttpClient, private loginService:LoginService, private apiService:ApiService<Rider>){}
 
   createAsRider(newRider:createRider):Observable<RiderCreateRes>
   {
-    return this.http.post<RiderCreateRes>(`${environment.snbUrl}/user/createAsRider`,newRider)
+    return this.apiService.create<createRider,RiderCreateRes>('user/createAsRider',newRider)
   }
 
   getAllRiders():Observable<Rider[]>
   {
-    return this.http.get<Rider[]>(`${environment.mtuUrl}/rider/getAllRiders`)
+    return this.apiService.getAll('rider/getAllRiders') 
   }
 
   getRider():Observable<Rider>
   {
     const currentRiderId=this.loginService.getUserIdFromLocalStorage();
-   return this.http.get<Rider>(`${environment.mtuUrl}/rider/profile/${currentRiderId}`)
+   return this.apiService.getById('rider/profile/',currentRiderId);
   }
 }
