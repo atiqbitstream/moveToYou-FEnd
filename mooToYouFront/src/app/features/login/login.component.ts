@@ -61,9 +61,6 @@ export class LoginComponent implements OnInit {
       this.loginService.loginUser(loginRequest).subscribe({
         next: (response) => {
           console.log(response);
-
-          localStorage.setItem('authData',JSON.stringify(response));
-
           this.router.navigate(['/home'])
         },
         error: (err) => {
