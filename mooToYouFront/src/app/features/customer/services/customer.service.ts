@@ -3,23 +3,22 @@ import { Injectable } from "@angular/core";
 import { ICustomerCreation } from "../interfaces/customerCreate.interface";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
+import { ApiService } from "../../shared/generics/api.service";
 
 @Injectable({providedIn:"root"})
 export class CustomerService
 {
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient, private apiService:ApiService<ICustomerCreation>){}
 
   customerCreate(newCustomer:ICustomerCreation):Observable<ICustomerCreation>
   {
-     return this.http.post<ICustomerCreation>(`${environment.mtuUrl}/customer/create`,newCustomer)
+     return this.apiService.create('customer/create',newCustomer)
   }
 
 
   fetchCustomersByOrganization(organizationId:number):Observable<any[]>
   {
-     return this.http.get<any[]>(`${environment.mtuUrl}/customer/getAllCustomers`,{
-      params:{organizationId:organizationId}
-     })
+     return this.apiService.getAll('customer/getAllCustomers',{organizationId});
   }
 
   
