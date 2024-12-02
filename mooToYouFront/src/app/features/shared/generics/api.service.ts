@@ -21,8 +21,8 @@ export class ApiService<T> {
     return this.http.get<T>(`${environment.apiUrl}/${endpoint}/${id}`);
   }
 
-  create(endpoint: string, data: T): Observable<T> {
-    return this.http.post<T>(`${environment.apiUrl}/${endpoint}`, data);
+  create<TRequest,TResponse>(endpoint: string, data: TRequest): Observable<TResponse> {
+    return this.http.post<TResponse>(`${environment.apiUrl}/${endpoint}`, data);
   }
 
   update(endpoint: string, id: number | string, data: T): Observable<T> {
