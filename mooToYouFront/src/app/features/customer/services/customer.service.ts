@@ -22,5 +22,12 @@ export class CustomerService
      })
   }
 
+  getCustomerById(customerId:number,organizationId:number)
+  {
+  return this.http.get(`${environment.mtuUrl}/customer/getCustomer/`,{
+   params:{customerId,organizationId}
+  })
+  }
+
   
 }
