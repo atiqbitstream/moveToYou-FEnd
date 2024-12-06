@@ -7,7 +7,7 @@ import { RoleGuard } from '../shared/guards/role.guard';
 import { ERole } from '../shared/enums/roles.enum';
 
 const routes: Routes = [
-  {path:'',component:CustomerComponent,canActivate:[RoleGuard],data:{roles:[ERole.ADMIN]}},
+  {path:'',component:CustomerComponent},
   {path : 'create', component:CustomerCreateComponent},
   {path:'list', component:CustomerListComponent}
 ];
