@@ -19,7 +19,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/rider/rider.module').then((m) => m.RiderModule),
     canActivate: [RoleGuard],
-    data: { roles: [ERole.RIDER] },
+    data: { roles: [ERole.RIDER, ERole.ADMIN] },
   },
   {
     path: 'customers',
