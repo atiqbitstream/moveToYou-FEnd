@@ -30,6 +30,8 @@
     <tbody>
         @for (customer of customers; track customer.id) 
         {
+            @if(!customer.isDeleted)
+            {
            <tr>
             <td>{{customer.firstName}}</td>
             <td>{{customer.lastName}}</td>
@@ -43,8 +45,9 @@
             <td>{{customer.status}}</td>
             <td>{{customer.contract}}</td>
             <td><button [routerLink]="['/customers/update',customer.id, customer.organizationId]">Update</button></td>
-            <td><button>Delete</button></td>
+            <td><button (click)="onDeleteCustomer(customer.id)">Delete</button></td>
            </tr>
+        }
         }
     
     </tbody>

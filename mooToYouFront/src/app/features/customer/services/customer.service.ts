@@ -34,5 +34,10 @@ export class CustomerService
      return this.http.patch(`${environment.mtuUrl}/customer/update/${id}`,updatedCustomer)
   }
 
+  softDeleteCustomer(customerId:number)
+  {
+  return this.http.delete(`${environment.mtuUrl}/customer/delete/${customerId}`)
+  }
+
   
 }

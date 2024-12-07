@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CustomerService } from '../services/customer.service';
+import { error } from 'console';
 
 @Component({
   selector: 'app-customer-list',
@@ -29,4 +30,20 @@ constructor(private customerService:CustomerService){}
       })
    }
   }
+
+  onDeleteCustomer(customerId:number)
+  {
+    this.customerService.softDeleteCustomer(customerId).subscribe({
+      next:()=>{
+        this.customers.filter(customer=>customer.id)
+        console.log("customer deleted succesfully!")
+      },
+      error:(error)=>{
+        console.error('Error deleting customer : ',error);
+      }
+    })
+  }
+
+
+
 }
