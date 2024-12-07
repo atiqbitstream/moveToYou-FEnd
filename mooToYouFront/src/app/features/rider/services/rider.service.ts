@@ -20,12 +20,12 @@ export class RiderService
 
   getAllRiders():Observable<Rider[]>
   {
-    return this.http.get<Rider[]>(`${environment.mtuUrl}/rider/getAllRiders`)
+    return this.http.get<Rider[]>(`${environment.snbUrl}/rider/getAllRiders`)
   }
 
   getRider():Observable<Rider>
   {
     const currentRiderId=this.loginService.getUserIdFromLocalStorage();
-   return this.http.get<Rider>(`${environment.mtuUrl}/rider/profile/${currentRiderId}`)
+   return this.http.get<Rider>(`${environment.snbUrl}/user/getAsRider/${currentRiderId}`)
   }
 }
