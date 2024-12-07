@@ -42,7 +42,7 @@
             <td>{{customer.organization}}</td>
             <td>{{customer.status}}</td>
             <td>{{customer.contract}}</td>
-            <td><button>Update</button></td>
+            <td><button [routerLink]="['/customers/update',customer.id, customer.organizationId]">Update</button></td>
             <td><button>Delete</button></td>
            </tr>
         }

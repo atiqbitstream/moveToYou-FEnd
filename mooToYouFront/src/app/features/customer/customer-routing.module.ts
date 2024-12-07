@@ -5,11 +5,13 @@ import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerComponent } from './customer.component';
 import { RoleGuard } from '../shared/guards/role.guard';
 import { ERole } from '../shared/enums/roles.enum';
+import { CustomerUpdateComponent } from './customer-update/customer-update.component';
 
 const routes: Routes = [
   {path:'',component:CustomerComponent},
   {path : 'create', component:CustomerCreateComponent},
-  {path:'list', component:CustomerListComponent}
+  {path:'list', component:CustomerListComponent},
+  {path:'update/:id/:orgId',component:CustomerUpdateComponent}
 ];
 
 @NgModule({

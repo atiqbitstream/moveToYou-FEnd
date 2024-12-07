@@ -1,0 +1,80 @@
+<form [formGroup]="customerUpdateForm" (ngSubmit)="onCustomerUpdate()">
+   
+    <label>Enter customer's first name : </label>
+    <input type="text" formControlName="firstName" required/>
+    <div *ngIf="customerUpdateForm.get('firstName')?.invalid && customerUpdateForm.get('firstName')?.touched">
+        Please enter a valid first name (min 5 characters)
+    </div><br><br>
+
+    <label>Enter customer's last name : </label>
+    <input type="text" formControlName="lastName" required/>
+    <div *ngIf="customerUpdateForm.get('lastName')?.invalid && customerUpdateForm.get('lastName')?.touched">
+        Please enter a valid last name (min 5 characters)
+    </div><br><br>
+
+    <label>Enter customer's phone number : </label>
+    <input type="tel" formControlName="phoneNumber"/>
+    <div *ngIf="customerUpdateForm.get('phoneNumber')?.invalid && customerUpdateForm.get('phoneNumber')?.touched">
+        Please enter a valid phone number (11 digits)
+    </div><br><br>
+
+    <label>Enter customer's address : </label>
+    <input type="text" formControlName="address"/>
+    <div *ngIf="customerUpdateForm.get('address')?.invalid && customerUpdateForm.get('address')?.touched">
+        Please enter a valid address (min 50 characters)
+    </div><br><br>
+
+    <label>Enter customer's sector : </label>
+    <input type="text" formControlName="sector"/>
+    <div *ngIf="customerUpdateForm.get('sector')?.invalid && customerUpdateForm.get('sector')?.touched">
+        Please enter a valid sector (max 10 characters)
+    </div><br><br>
+
+    <label>Enter customer's Street : </label>
+    <input type="text" formControlName="street"/>
+    <div *ngIf="customerUpdateForm.get('street')?.invalid && customerUpdateForm.get('street')?.touched">
+        Please enter a valid street (min 8 characters)
+    </div><br><br>
+
+    <label>Enter customer's google pin : </label>
+    <input type="text" formControlName="googlePin"/>
+    <div *ngIf="customerUpdateForm.get('googlePin')?.invalid && customerUpdateForm.get('googlePin')?.touched">
+        Please enter a valid google pin (min 10 characters)
+    </div><br><br>
+
+    <label>Enter customer's home picture : </label>
+    <input type="text" formControlName="homePicture"/>
+    <div *ngIf="customerUpdateForm.get('homePicture')?.invalid && customerUpdateForm.get('homePicture')?.touched">
+        Please enter a valid home picture URL (min 10 characters)
+    </div><br><br>
+
+    <label>Enter customer's organization : </label>
+    <select formControlName="organization">
+        <option value="">Select Organization</option>
+        <option value="emaanDairy">Emaan Dairy</option>
+        <option value="newDairy">New Dairy</option>
+    </select>
+    <div *ngIf="customerUpdateForm.get('organization')?.invalid && customerUpdateForm.get('organization')?.touched">
+        Please select an organization
+    </div><br><br>
+
+    <input type="hidden" formControlName="organizationId"/>
+
+    <label>Enter customer's contract : </label>
+    <input type="text" formControlName="contract"/>
+    <div *ngIf="customerUpdateForm.get('contract')?.invalid && customerUpdateForm.get('contract')?.touched">
+        Please enter a valid contract (min 10 characters)
+    </div><br><br>
+
+    <label>Set customer's status : </label>
+    <select formControlName="status">
+        <option value="">Select status</option>
+        <option value="true">Active</option>
+        <option value="false">DeActive</option>
+    </select>
+    <div *ngIf="customerUpdateForm.get('status')?.invalid && customerUpdateForm.get('status')?.touched">
+        Please select a status
+    </div><br><br>
+
+    <button type="submit" [disabled]="customerUpdateForm.invalid">Update Customer</button>
+</form>

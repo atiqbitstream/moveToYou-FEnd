@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ICustomerCreation } from "../interfaces/customerCreate.interface";
+import { ICustomer, ICustomerCreation } from "../interfaces/customerCreate.interface";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
 
@@ -20,6 +20,18 @@ export class CustomerService
      return this.http.get<any[]>(`${environment.mtuUrl}/customer/getAllCustomers`,{
       params:{organizationId:organizationId}
      })
+  }
+
+  fetchCustomerByIdnOrg(customerId:number,organizationId:number):Observable<ICustomer>
+  {
+   console.log("fetchCustomerByIdnOrg called")
+   return this.http.get<ICustomer>(`${environment.mtuUrl}/customer/getCustomer`,{params:{customerId,organizationId}})
+  }
+
+  updateCustomer(id:number, updatedCustomer:ICustomerCreation)
+  {
+   console.log("updateCustomer called")
+     return this.http.patch(`${environment.mtuUrl}/customer/update/${id}`,updatedCustomer)
   }
 
   
