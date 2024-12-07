@@ -13,3 +13,20 @@
     @apply text-gray-800 bg-gray-50;
     font-family: 'Inter', sans-serif;
   }
+
+  /* Typography Responsive Scale */
+html {
+    font-size: 16px;
+  }
+  
+  @screen sm {
+    html {
+      font-size: 17px;
+    }
+  }
+  
+  @screen md {
+    html {
+      font-size: 18px;
+    }
+  }
