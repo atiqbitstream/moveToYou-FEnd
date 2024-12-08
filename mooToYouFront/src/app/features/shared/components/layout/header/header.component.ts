@@ -5,6 +5,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatBadgeModule} from '@angular/material/badge';
+import { MaterialService } from '../../../services/material.service';
 
 
 @Component({
@@ -16,5 +17,10 @@ import {MatBadgeModule} from '@angular/material/badge';
 })
 export class HeaderComponent {
 
+  constructor(private sidenavService: MaterialService) {}
 
+  // Method to toggle the sidenav when the menu button is clicked
+  toggleSidenav() {
+    this.sidenavService.toggleSidenav();
+  }
 }
