@@ -4,9 +4,11 @@ import { HomeComponent } from './features/home/home.component';
 import { UnauthorizedComponent } from './features/shared/components/unauthorized/unauthorized.component';
 import { RoleGuard } from './features/shared/guards/role.guard';
 import { ERole } from './features/shared/enums/roles.enum';
+import { TestComponent } from './features/shared/components/layout/test/test.component';
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  {path:'',component:TestComponent},
+  { path: 'login', component: LoginComponent },
   {
     path: 'home',
     component: HomeComponent,
