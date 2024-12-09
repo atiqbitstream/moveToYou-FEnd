@@ -1,22 +1,19 @@
-<!-- Creates a layout with a left-positioned sidenav and explicit content. -->
-
-<mat-drawer-container class=" md:w-full md:h-screen bg-slate-700" autosize>
-    <mat-drawer #drawer class="w-1/2" mode="over">
-     
+<mat-drawer-container class="h-screen w-full">
+  <mat-drawer #drawer mode="over" class="w-64">
+    <div class="h-full flex flex-col">
       <img src="/picture.png" class="h-24 mx-auto">
-      <p class="text-xl text-center font-semibold text-white pt-4">Atiq Ur Rehman</p>
-      <p class="text-xl text-center font-light text-white mt-0">atiq&#64;company.com</p>
-  
-      <div class="flex flex-col justify-start text-white font-medium text-sm h-5">
-      <button class="hover:bg-gray-700 text-xl text-left p-2">Project</button>
-      <button class="hover:bg-gray-700 text-xl text-left p-2">Analytics</button>
-      <button class="hover:bg-gray-700 text-xl text-left p-2">Finance</button>
-      <button class="hover:bg-gray-700 text-xl text-left p-2">Crypto</button>
+      <p class="text-xl text-center text-white">Atiq Ur Rehman</p>
+      
+      <div class="flex-grow flex flex-col mt-4">
+        <button mat-button class="w-full text-left">Project</button>
+        <button mat-button class="w-full text-left">Analytics</button>
+        <button mat-button class="w-full text-left">Finance</button>
+        <button mat-button class="w-full text-left">Crypto</button>
       </div>
-    </mat-drawer>
-  
-    <div class="example-main-content">
-      <ng-content></ng-content>
     </div>
-  </mat-drawer-container>
+  </mat-drawer>
   
+  <mat-drawer-content class="h-full">
+    <ng-content></ng-content>
+  </mat-drawer-content>
+</mat-drawer-container>

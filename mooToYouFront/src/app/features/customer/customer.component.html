@@ -1,7 +1,24 @@
-<nav>
-    <a routerLink="/home">Goto Home page</a>&nbsp;&nbsp;
-    <a routerLink="/customers/create">create a customer</a>&nbsp;&nbsp;
-    <a routerLink="/customers/list">list customers</a>&nbsp;&nbsp;
 
-
-</nav>
+<div class="relative mt-11 ml-11">
+    <button mat-raised-button 
+            [matMenuTriggerFor]="customerMenu" 
+            (mouseenter)="triggerMenu.openMenu()"
+            #triggerMenu="matMenuTrigger"
+            class="bg-blue-500 text-white">
+            Weclome To Customers Section
+            <mat-icon>arrow_drop_down_circle</mat-icon>
+     
+    </button>
+  
+    <mat-menu #customerMenu="matMenu" 
+              class="hover-menu">
+      <button mat-menu-item routerLink="/customers/create">
+        <mat-icon>add</mat-icon>
+        <span>Create Customer</span>
+      </button>
+      <button mat-menu-item routerLink="/customers/list">
+        <mat-icon>list</mat-icon>
+        <span>List Customers</span>
+      </button>
+    </mat-menu>
+  </div>

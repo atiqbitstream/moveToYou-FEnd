@@ -6,6 +6,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatBadgeModule} from '@angular/material/badge';
 import { MaterialService } from '../../../services/material.service';
+import { HomeService } from '../../../../home/service/home.service';
 
 
 @Component({
@@ -17,10 +18,15 @@ import { MaterialService } from '../../../services/material.service';
 })
 export class HeaderComponent {
 
-  constructor(private sidenavService: MaterialService) {}
+  constructor(private sidenavService: MaterialService, private homeService:HomeService) {}
 
   // Method to toggle the sidenav when the menu button is clicked
   toggleSidenav() {
     this.sidenavService.toggleSidenav();
+  }
+
+  onLogOut()
+  {
+    this.homeService.logOut();
   }
 }

@@ -1,12 +1,29 @@
-<mat-toolbar class="border">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="toggleSidenav()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span class="hidden md:block">mooToYou</span>
-  <span class="example-spacer"></span>
-  <mat-slide-toggle class="mr-5 md:mx-4">Dark Mode </mat-slide-toggle>
-  <button class="mr-7 md:mx-4" mat-raised-button matBadge="8" matBadgePosition="before">
-    Action
-  </button>
-  <img class="h-1/2  md:h-1/1 md:w-1/1 rounded-lg md:mx-4" src="/assets/top.svg">
+<mat-toolbar class="border flex items-center justify-between px-2 md:px-4">
+  <div class="flex items-center">
+    <button mat-icon-button class="mr-2" aria-label="Toggle menu" (click)="toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span class="text-lg font-semibold hidden md:block">mooToYou</span>
+  </div>
+
+  <div class="flex items-center space-x-2 md:space-x-4">
+    <mat-slide-toggle class="scale-75 md:scale-100">
+      Dark Mode
+    </mat-slide-toggle>
+    
+    <button 
+      mat-icon-button class="rounded-full"
+      color="primary" 
+      (click)="onLogOut()"
+     
+    >
+    <mat-icon>power_settings_new</mat-icon>
+    </button>
+    
+    <img 
+      class="w-8 h-8 md:w-10 md:h-10 rounded-lg object-cover" 
+      src="/assets/top.svg" 
+      alt="Profile"
+    >
+  </div>
 </mat-toolbar>

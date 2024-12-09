@@ -1,0 +1,4 @@
+:host ::ng-deep .mat-mdc-card-content {
+    color: inherit !important;
+    padding: 16px !important;
+  }

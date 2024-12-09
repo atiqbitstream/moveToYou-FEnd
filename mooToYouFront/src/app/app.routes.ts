@@ -7,21 +7,21 @@ import { ERole } from './features/shared/enums/roles.enum';
 import { TestComponent } from './features/shared/components/layout/test/test.component';
 
 export const routes: Routes = [
-  {path:'',component:TestComponent},
-  { path: 'login', component: LoginComponent },
+  {path:'test',component:TestComponent},
+  { path: '', component: LoginComponent },
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [RoleGuard],
-    data: { roles: [ERole.ADMIN, ERole.RIDER, ERole.USER] },
+    // canActivate: [RoleGuard],
+    // data: { roles: [ERole.ADMIN, ERole.RIDER, ERole.USER] },
   },
   { path: 'unauthorized', component: UnauthorizedComponent },
   {
     path: 'riders',
     loadChildren: () =>
       import('./features/rider/rider.module').then((m) => m.RiderModule),
-    canActivate: [RoleGuard],
-    data: { roles: [ERole.RIDER, ERole.ADMIN] },
+    // canActivate: [RoleGuard],
+    // data: { roles: [ERole.RIDER, ERole.ADMIN] },
   },
   {
     path: 'customers',
@@ -29,7 +29,7 @@ export const routes: Routes = [
       import('./features/customer/customer.module').then(
         (m) => m.CustomerModule
       ),
-    canActivate: [RoleGuard],
-    data: { roles: [ERole.ADMIN] },
+    // canActivate: [RoleGuard],
+    // data: { roles: [ERole.ADMIN] },
   },
 ];

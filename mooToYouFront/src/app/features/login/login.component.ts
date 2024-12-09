@@ -11,11 +11,19 @@ import { LoginRequest } from './interfaces/loginRequest.interface';
 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatCardModule} from '@angular/material/card';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
