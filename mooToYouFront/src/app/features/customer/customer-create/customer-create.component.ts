@@ -3,11 +3,21 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CustomerService } from '../services/customer.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customer-create',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink,CommonModule, ReactiveFormsModule,MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule],
   templateUrl: './customer-create.component.html',
   styleUrl: './customer-create.component.css'
 })
@@ -78,6 +88,54 @@ export class CustomerCreateComponent implements OnInit {
       this.setOrganizationId(org);
     })
   }
+  get firstName() {
+    return this.customerCreationForm.get('firstName');
+  }
+  
+  get lastName() {
+    return this.customerCreationForm.get('lastName');
+  }
+  
+  get phoneNumber() {
+    return this.customerCreationForm.get('phoneNumber');
+  }
+  
+  get address() {
+    return this.customerCreationForm.get('address');
+  }
+  
+  get sector() {
+    return this.customerCreationForm.get('sector');
+  }
+  
+  get street() {
+    return this.customerCreationForm.get('street');
+  }
+  
+  get googlePin() {
+    return this.customerCreationForm.get('googlePin');
+  }
+  
+  get homePicture() {
+    return this.customerCreationForm.get('homePicture');
+  }
+  
+  get status() {
+    return this.customerCreationForm.get('status');
+  }
+  
+  get organization() {
+    return this.customerCreationForm.get('organization');
+  }
+  
+  get organizationId() {
+    return this.customerCreationForm.get('organizationId');
+  }
+  
+  get contract() {
+    return this.customerCreationForm.get('contract');
+  }
+  
 
   setOrganizationId(organization:string)
   {

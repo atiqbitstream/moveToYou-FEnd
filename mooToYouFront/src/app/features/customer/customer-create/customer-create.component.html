@@ -1,51 +1,148 @@
-<a routerLink="/customers">Go Back</a><br><br>
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="mb-6">
+ <button mat-raised-button color="primary" routerLink="/customers" class="mb-4"><mat-icon>arrow_back</mat-icon> Back</button>
+</div>
 
 
-<form [formGroup]="customerCreationForm" (ngSubmit)="onCustomerCreate()">
+<form [formGroup]="customerCreationForm" (ngSubmit)="onCustomerCreate()" class="bg-white shadow-md rounded-lg p-8 space-y-6">
 
-    <label>Enter customer's first name : </label>
-    <input type="text" formControlName="firstName" required/><br><br>
+    <div class="grid md:grid-cols-2 gap-6">
 
-    <label>Enter customer's last name : </label>
-    <input type="text" formControlName="lastName" required/><br><br>
+        <mat-form-field  class="w-full">
+    <mat-label>First Name : </mat-label>
+    <input matInput formControlName="firstName" required placeholder="Enter first name"/>
+    <mat-error *ngIf="customerCreationForm.get('firstName')?.invalid">
+     First Name is required
+    </mat-error>
+    </mat-form-field>
 
-    <label>Enter customer's phone number : </label>
-    <input type="tel" formControlName="phoneNumber"/><br><br>
+     <!-- Last Name -->
+     <mat-form-field  class="w-full">
+        <mat-label>Last Name</mat-label>
+        <input 
+          matInput 
+          formControlName="lastName" 
+          required 
+          placeholder="Enter last name"
+        />
+        <mat-error *ngIf="customerCreationForm.get('lastName')?.invalid">
+          Last Name is required
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <label>Enter customer's address : </label>
-    <input type="text" formControlName="address"/><br><br>
+    <!-- Phone Number -->
+    <mat-form-field class="w-full">
+      <mat-label>Phone Number</mat-label>
+      <input 
+        matInput 
+        formControlName="phoneNumber" 
+        type="tel" 
+        placeholder="Enter phone number"
+      />
+    </mat-form-field>
 
-    <label>Ener customer's sector : </label>
-    <input type="text" formControlName="sector"/><br><br>
+    <!-- Address -->
+    <mat-form-field  class="w-full">
+      <mat-label>Address</mat-label>
+      <input 
+        matInput 
+        formControlName="address" 
+        placeholder="Enter full address"
+      />
+    </mat-form-field>
 
-    <label>Enter customer's Street : </label>
-    <input type="text" formControlName="street"/><br><br>
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Sector -->
+        <mat-form-field  class="w-full">
+          <mat-label>Sector</mat-label>
+          <input 
+            matInput 
+            formControlName="sector" 
+            placeholder="Enter sector"
+          />
+        </mat-form-field>
+  
+        <!-- Street -->
+        <mat-form-field  class="w-full">
+          <mat-label>Street</mat-label>
+          <input 
+            matInput 
+            formControlName="street" 
+            placeholder="Enter street name"
+          />
+        </mat-form-field>
+      </div>
+  
+      <!-- Google Pin -->
+      <mat-form-field  class="w-full">
+        <mat-label>Google Pin</mat-label>
+        <input 
+          matInput 
+          formControlName="googlePin" 
+          placeholder="Enter Google Pin"
+        />
+      </mat-form-field>
+  
+      <!-- Home Picture -->
+      <mat-form-field  class="w-full">
+        <mat-label>Home Picture</mat-label>
+        <input 
+          matInput 
+          formControlName="homePicture" 
+          placeholder="Enter home picture URL"
+        />
+      </mat-form-field>
 
-    <label>Enter customer's google pin : </label>
-    <input type="text" formControlName="googlePin"/><br><br>
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Organization -->
+        <mat-form-field  class="w-full">
+          <mat-label>Organization</mat-label>
+          <mat-select formControlName="organization">
+            <mat-option value="">Select Organization</mat-option>
+            <mat-option value="emaanDairy">Emaan Dairy</mat-option>
+            <mat-option value="newDairy">New Dairy</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- Status -->
+        <mat-form-field  class="w-full">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="">Select Status</mat-option>
+            <mat-option value="true">Active</mat-option>
+            <mat-option value="false">Inactive</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  
+      <!-- Contract -->
+      <mat-form-field  class="w-full">
+        <mat-label>Contract</mat-label>
+        <input 
+          matInput 
+          formControlName="contract" 
+          placeholder="Enter contract details"
+        />
+      </mat-form-field>
 
-    <label>Enter customer's home picture : </label>
-    <input type="text" formControlName="homePicture"/><br><br>
+          <!-- Hidden Organization ID -->
+    <input 
+    type="hidden" 
+    formControlName="organizationId"
+  />
 
-    <label>Enter customer's organization : </label>
-    <select formControlName="organization">
-        <option value="">Select Organization</option>
-        <option value="emaanDairy">Emaan Dairy</option>
-        <option value="newDairy">New Dairy</option>        
-    </select><br><br>
 
-    <input type="hidden" formControlName="organizationId"/>
-
-    <label>Enter customer's contract : </label>
-    <input type="text" formControlName="contract"/><br><br>
-
-    <label>Set customer's status : </label>
-    <select formControlName="status">
-        <option value="">Select status</option>
-        <option value="true">Active</option>
-        <option value="false">DeActive</option>
-
-    </select><br><br>
-
-    <button type="submit">Submit</button>
+   <!-- Submit Button -->
+   <div class="flex justify-end">
+    <button 
+      mat-raised-button 
+      color="primary" 
+      type="submit" 
+      [disabled]="customerCreationForm.invalid"
+      class="w-full md:w-auto">
+      Create Customer
+    </button>
+  </div>
 </form>
+</div>
