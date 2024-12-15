@@ -1,11 +1,23 @@
-<nav>
-    <a routerLink="/home">Goto Home</a>&nbsp;&nbsp;
-    <a routerLink="/riders/list">See Riders</a>&nbsp;&nbsp;
-    <a routerLink="/riders/create">create Rider</a>&nbsp;&nbsp;
-   
-
-</nav>
-
-
-
-<router-outlet></router-outlet>
+<div class="relative mt-11 ml-11">
+    <button mat-raised-button 
+            [matMenuTriggerFor]="customerMenu" 
+            (mouseenter)="triggerMenu.openMenu()"
+            #triggerMenu="matMenuTrigger"
+            class="bg-blue-500 text-white">
+            Weclome To Riders Section
+            <mat-icon>arrow_drop_down_circle</mat-icon>
+     
+    </button>
+  
+    <mat-menu #customerMenu="matMenu" 
+              class="hover-menu">
+      <button mat-menu-item routerLink="/riders/create">
+        <mat-icon>add</mat-icon>
+        <span>Create Rider</span>
+      </button>
+      <button mat-menu-item routerLink="/riders/list">
+        <mat-icon>list</mat-icon>
+        <span>List Riders</span>
+      </button>
+    </mat-menu>
+  </div>
