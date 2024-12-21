@@ -17,9 +17,9 @@
           </div>
           <mat-chip-listbox>
             <mat-chip-option 
-              [selected]="customer.status === 'true'"
-              [color]="customer.status === 'true' ? 'primary' : 'warn'">
-              {{customer.status === 'true' ? 'Active' : 'Inactive'}}
+              [selected]="customer.status === true"
+              [color]="customer.status === true ? 'primary' : 'warn'">
+              {{customer.status === true? 'Active' : 'Inactive'}}
             </mat-chip-option>
           </mat-chip-listbox>
         </div>

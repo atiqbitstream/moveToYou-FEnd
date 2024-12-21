@@ -14,6 +14,13 @@ import { response } from 'express';
 import { CustomerService } from '../services/customer.service';
 import { error } from 'console';
 import { switchMap } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export interface Customer
 {
@@ -37,13 +44,22 @@ export interface Customer
 @Component({
   selector: 'app-customer-update',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [CommonModule,
+      ReactiveFormsModule,
+      MatButtonModule,
+      MatIconModule,
+      MatProgressSpinnerModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatSelectModule,
+      MatSnackBarModule],
   templateUrl: './customer-update.component.html',
   styleUrl: './customer-update.component.css',
 })
 export class CustomerUpdateComponent implements OnInit {
   customerUpdateForm!: FormGroup;
   customerId!: number;
+  isLoading = false;
  
 
   constructor(
