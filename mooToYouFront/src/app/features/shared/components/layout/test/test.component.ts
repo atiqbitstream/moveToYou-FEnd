@@ -8,7 +8,7 @@ import { SidebarComponent } from "../sidebar/sidebar.component";
 @Component({
   selector: 'app-test',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent],
+  imports: [],
   templateUrl: './test.component.html',
   styleUrl: './test.component.css'
 })

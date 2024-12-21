@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { ICustomer, ICustomerCreation } from "../interfaces/customerCreate.interface";
 import { Observable } from "rxjs";
 import { environment } from "../../../../environments/environment";
+import { Customer } from "../customer-update/customer-update.component";
 
 @Injectable({providedIn:"root"})
 export class CustomerService
@@ -22,10 +23,9 @@ export class CustomerService
      })
   }
 
-  fetchCustomerByIdnOrg(customerId:number,organizationId:number):Observable<ICustomer>
+  fetchCustomer(customerId:number):Observable<Customer>
   {
-   console.log("fetchCustomerByIdnOrg called")
-   return this.http.get<ICustomer>(`${environment.mtuUrl}/customer/getCustomer`,{params:{customerId,organizationId}})
+   return this.http.get<Customer>(`${environment.mtuUrl}/customer/getCustomer`,{params:{customerId}})
   }
 
   updateCustomer(id:number, updatedCustomer:ICustomerCreation)

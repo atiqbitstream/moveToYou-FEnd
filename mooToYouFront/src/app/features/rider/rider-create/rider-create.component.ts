@@ -1,62 +1,80 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { RouterLink, RouterModule } from '@angular/router';
 import { RiderService } from '../services/rider.service';
 import { createRider } from '../interfaces/riderCreate.interface';
 import { response } from 'express';
 import { ERole } from '../../shared/enums/roles.enum';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-rider-create',
   standalone: true,
-  imports: [RouterModule,ReactiveFormsModule,CommonModule],
+  imports: [
+    RouterLink,
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './rider-create.component.html',
-  styleUrl: './rider-create.component.css'
+  styleUrl: './rider-create.component.css',
 })
-export class RiderCreateComponent implements OnInit{
+export class RiderCreateComponent implements OnInit {
+  riderCreationForm!: FormGroup;
 
-  riderCreationForm!:FormGroup;
+  roles = Object.values(ERole);
 
-  roles=Object.values(ERole);
-
-  constructor(private riderService:RiderService){}
+  constructor(private riderService: RiderService) {}
 
   ngOnInit(): void {
-    this.riderCreationForm= new FormGroup({
-      username:new FormControl('',[
+    this.riderCreationForm = new FormGroup({
+      username: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
       ]),
-      firstName : new FormControl('',[
+      firstName: new FormControl('', [
         Validators.required,
         Validators.minLength(5),
       ]),
-      lastName : new FormControl('',[
+      lastName: new FormControl('', [
         Validators.required,
-        Validators.minLength(5)
+        Validators.minLength(5),
       ]),
-      phoneNumber: new FormControl('',[
+      phoneNumber: new FormControl('', [
         Validators.required,
         Validators.minLength(11),
-        Validators.pattern(/[0-9]/)
+        Validators.pattern(/[0-9]/),
       ]),
-      address:new FormControl('',[
+      address: new FormControl('', [
         Validators.required,
-        Validators.maxLength(50)
+        Validators.maxLength(50),
       ]),
-      sector:new FormControl('',[
+      sector: new FormControl('', [
         Validators.required,
-        Validators.maxLength(10)
+        Validators.maxLength(10),
       ]),
-      cnicNumber:new FormControl('',[
+      cnicNumber: new FormControl('', [
         Validators.required,
         Validators.minLength(13),
-        Validators.pattern('^\\d{5}-\\d{7}-\\d{1}$')
+        Validators.pattern('^\\d{5}-\\d{7}-\\d{1}$'),
       ]),
-      email:new FormControl('',[
+      email: new FormControl('', [
         Validators.required,
-        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$')
+        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'),
       ]),
       password: new FormControl('', [
         Validators.required,
@@ -66,19 +84,29 @@ export class RiderCreateComponent implements OnInit{
         Validators.pattern(/[0-9]/),
         Validators.pattern(/[\!@#\^\&*\)\(+=_-]/),
       ]),
-      role:new FormControl('',[
-         Validators.required
-      ]),
-      street:new FormControl('',[
+      role: new FormControl('', [Validators.required]),
+      street: new FormControl('', [
         Validators.required,
-        Validators.minLength(10)
+        Validators.minLength(10),
       ]),
-    })
+
+      organization: new FormControl('', [
+        Validators.required,
+  
+      ]),
+
+      organizationId: new FormControl(''),
+    });
+
+    this.riderCreationForm
+      .get('organization')
+      ?.valueChanges.subscribe((org) => {
+        this.setOrganizationId(org);
+      });
   }
 
-  get username()
-  {
-    return this.riderCreationForm.get('username')
+  get username() {
+    return this.riderCreationForm.get('username');
   }
 
   get firstName() {
@@ -109,38 +137,53 @@ export class RiderCreateComponent implements OnInit{
     return this.riderCreationForm.get('street');
   }
 
-  get email()
-  {
-    return this.riderCreationForm.get('email')
+  get email() {
+    return this.riderCreationForm.get('email');
   }
 
-  get role()
-  {
+  get role() {
     return this.riderCreationForm.get('role');
   }
 
-  get password()
-  {
-    return this.riderCreationForm.get('password')
+  get organization() {
+    return this.riderCreationForm.get('organization');
   }
-
-  onRiderCreate()
-  {
-
-    if(this.riderCreationForm.valid)
-    {
-      const  riderCreateData:createRider=this.riderCreationForm.value;
-
-      this.riderService.createAsRider(riderCreateData).subscribe(
-      {
-        next:(response)=>{
-          console.log("The Rider is created succesfully in the MTU backend",response);
-        }
-      }
-      )
-    }
   
+  get organizationId() {
+    return this.riderCreationForm.get('organizationId');
   }
 
-}
+  get password() {
+    return this.riderCreationForm.get('password');
+  }
 
+  setOrganizationId(organization: string) {
+    switch (organization) {
+      case 'emaanDairy':
+        this.riderCreationForm.get('organizationId')?.setValue(1);
+        break;
+
+      case 'newDairy':
+        this.riderCreationForm.get('organizationId')?.setValue(2);
+        break;
+      default:
+        this.riderCreationForm.get('organizationId')?.setValue(null);
+        break;
+    }
+  }
+
+  onRiderCreate() {
+    if (this.riderCreationForm.valid) {
+      const riderCreateData: createRider = this.riderCreationForm.value;
+
+      this.riderService.createAsRider(riderCreateData).subscribe({
+        next: (response) => {
+          console.log(
+            'The Rider is created succesfully in the MTU backend',
+            response
+          );
+        },
+      });
+    }
+  }
+}

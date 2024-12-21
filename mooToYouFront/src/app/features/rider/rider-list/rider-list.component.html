@@ -1,36 +1,71 @@
-<a routerLink="/riders">Goto Riders home page</a><br><br>
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+  <!-- Go Back Button -->
+  <div class="mb-6">
+    <button mat-raised-button color="primary" routerLink="/riders" class="mb-4">
+      <mat-icon>arrow_back</mat-icon> Go Back
+    </button>
+  </div>
+  
+  
 
-<button (click)="toggleShowMyProfile()">show My Profile Only</button>
-
-<p>All the Riders are listed down Here : !</p><br><br>
-
-<table class="rider-table">
-    <thead>
-    <tr>
-        <th>firstName</th>
-        <th>lastName</th>
-        <th>phoneNumber</th>
-        <th>address</th>
-        <th>Sector</th>
-        <th>Street</th>
-        <th>cnicNumber</th>
-        <th>isDeleted</th>
-    </tr>
-    </thead>
-    <tbody>
-        @for (rider of (showAllRiders ? riders:[currentRider]); track rider.id) {
-            <tr>
-                <td>{{rider.firstName}}</td>
-                <td>{{rider.lastName}}</td>
-                <td>{{rider.phoneNumber}}</td>
-                <td>{{rider.address}}</td>
-                <td>{{rider.sector}}</td>
-                <td>{{rider.street}}</td>
-                <td>{{rider.cnicNumber}}</td>
-                <td>{{rider.isDeleted}}</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
+  <!-- Riders List for Mobile -->
+  <div class="bg-white shadow-md rounded-lg">
+    <div *ngFor="let rider of riders" class="border-b last:border-b-0 p-4">
+      <div class="flex justify-between items-center mb-2">
+        <div class="font-bold">
+          {{rider.firstName}} {{rider.lastName}}
+          <span class="ml-2 text-sm text-gray-500">({{rider?.organization}})</span>
+        </div>
+        <mat-chip-listbox>
+          <mat-chip-option
+            [selected]="!rider.isDeleted"
+            [color]="!rider.isDeleted ? 'primary' : 'warn'">
+            {{!rider.isDeleted ? 'Active' : 'Inactive'}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+        <div>
+          <strong>Phone:</strong> {{rider.phoneNumber}}
+        </div>
+        <div>
+          <strong>Address:</strong> {{rider.address}}
+        </div>
+        <div>
+          <strong>Sector:</strong> {{rider.sector}}
+        </div>
+        <div>
+          <strong>Street:</strong> {{rider.street}}
+        </div>
+        <div>
+          <strong>CNIC:</strong> {{rider.cnicNumber}}
+        </div>
+      </div>
+      
+      <div class="flex justify-end space-x-2">
+        <button
+          mat-mini-fab
+          color="primary"
+          [routerLink]="['/riders/update', rider.id]">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-mini-fab
+          color="warn"
+          (click)="onDeleteRider(rider.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Pagination -->
+    <div class="flex justify-center p-4">
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        class="w-full">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

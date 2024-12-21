@@ -1,6 +1,8 @@
+import { CustomerComponent } from './../customer.component';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
+  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -11,6 +13,26 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { response } from 'express';
 import { CustomerService } from '../services/customer.service';
 import { error } from 'console';
+import { switchMap } from 'rxjs';
+
+export interface Customer
+{
+
+  id:number;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  address: string;
+  sector: string;
+  street: string;
+  googlePin: string;
+  homePicture: string;
+  organization: string;
+  organizationId:number
+  status: boolean;
+  contract: string;
+
+}
 
 @Component({
   selector: 'app-customer-update',
@@ -22,148 +44,121 @@ import { error } from 'console';
 export class CustomerUpdateComponent implements OnInit {
   customerUpdateForm!: FormGroup;
   customerId!: number;
-  organizationId!: number;
+ 
 
   constructor(
     private router: Router,
+    private fb:FormBuilder,
     private route: ActivatedRoute,
     private customerService: CustomerService
-  ) {}
+  ) {
+    this.createForm();
+  }
 
   ngOnInit(): void {
-    this.customerUpdateForm = new FormGroup({
-      firstName: new FormControl([
-        '',
-        Validators.required,
-        Validators.minLength(5),
-      ]),
-
-      lastName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-      ]),
-
-      phoneNumber: new FormControl('', [
-        Validators.required,
-        Validators.minLength(11),
-        Validators.pattern(/[0-9]/),
-      ]),
-      address: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-      sector: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(10),
-      ]),
-      street: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8),
-      ]),
-      googlePin: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-      homePicture: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-
-      status: new FormControl('', [Validators.required]),
-      organization: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-
-      organizationId: new FormControl(''),
-
-      contract: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-    });
-
-    this.customerUpdateForm
-      .get('organization')
-      ?.valueChanges.subscribe((org) => {
-        this.setOrganizationId(org);
-      });
-
-    this.route.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
-      const orgIdParam = params.get('orgId');
-      if (idParam && orgIdParam) {
-        this.customerId = +idParam;
-        this.organizationId = +orgIdParam;
-      }
-    });
-  }
-
-  setOrganizationId(organization: string) {
-    switch (organization) {
-      case 'emaanDairy':
-        this.customerUpdateForm.get('organizationId')?.setValue(1);
-        break;
-      case 'newDairy':
-        this.customerUpdateForm.get('organizationId')?.setValue(2);
-        break;
-      default:
-        this.customerUpdateForm.get('organizationId')?.setValue(null);
-        break;
+   this.route.params.pipe(
+    switchMap(params=>{
+      this.customerId =+params['id'];
+      return this.customerService.fetchCustomer(this.customerId);
+    })
+   ).subscribe((customer:Customer | null)=>{
+    if(customer)
+    {
+      this.populateForm(customer)
     }
+   })
   }
 
-  fetchCustomerDetails() {
-    this.customerService
-      .fetchCustomerByIdnOrg(this.customerId, this.organizationId)
-      .subscribe({
-        next: (customer) => {
-          console.log("here are the fetched customer detials : ",customer)
-          const orgId =
-            customer.organization === 'Emaan Dairy'
-              ? 1
-              : customer.organization === 'New Dairy'
-              ? 2
-              : null;
-
-          this.customerUpdateForm.patchValue({
-            ...customer,
-            organizationId: orgId,
-            organization:
-              orgId == 1 ? 'emaanDairy' : orgId == 2 ? 'newDairy' : '',
-          });
-          console.log("customer update form ",this.customerUpdateForm)
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
+  private createForm()
+  {
+    this.customerUpdateForm=this.fb.group({
+      firstName : ['',[Validators.required, Validators.minLength(5)]],
+      lastName : ['',[Validators.required, Validators.minLength(5)]],
+      phoneNumber:['',[Validators.required,Validators.pattern('^[0-9]{11}$')]],
+      address: ['', [Validators.maxLength(50)]],
+      sector: ['', [Validators.maxLength(10)]],
+      street: [''],
+      googlePin : ['', [Validators.required, Validators.minLength(10)]],
+      homePicture:['',[Validators.required, Validators.minLength(10)]],
+      status: ['',[Validators.required,]],
+      organization: ['', Validators.required],
+      organizationId: [''],
+      contract:['',[Validators.required,Validators.minLength(10)]]
+    })
   }
 
-  onCustomerUpdate() {
-    if (this.customerUpdateForm.valid) {
-      const customerData = {
-        ...this.customerUpdateForm.value,
-        id: this.customerId,
-        orgId: this.organizationId,
-      };
+  private populateForm(customer:Customer)
+  {
+    this.customerUpdateForm.patchValue({
+      firtName:customer.firstName,
+      lastName:customer.lastName,
+      phoneNumber:customer.phoneNumber,
+      address: customer.address,
+      sector:customer.sector,
+      street:customer.street,
+      googlepin:customer.googlePin,
+      homePicture:customer.homePicture,
+      status:customer.status,
+      organization:customer.organization,
+      organizationId:customer.organizationId,
+      contract:customer.contract
+    })
+  }
 
-      if (!customerData.organizationId) {
-        console.log('update customer data deos not have organization Id');
-        return;
+  // Getter methods for form controls
+get firstName() {
+  return this.customerUpdateForm.get('firstName');
+}
+get lastName() {
+  return this.customerUpdateForm.get('lastName');
+}
+get phoneNumber() {
+  return this.customerUpdateForm.get('phoneNumber');
+}
+get address() {
+  return this.customerUpdateForm.get('address');
+}
+get sector() {
+  return this.customerUpdateForm.get('sector');
+}
+get street() {
+  return this.customerUpdateForm.get('street');
+}
+get googlePin() {
+  return this.customerUpdateForm.get('googlePin');
+}
+get homePicture() {
+  return this.customerUpdateForm.get('homePicture');
+}
+get status() {
+  return this.customerUpdateForm.get('status');
+}
+get organization() {
+  return this.customerUpdateForm.get('organization');
+}
+get organizationId() {
+  return this.customerUpdateForm.get('organizationId');
+}
+get contract() {
+  return this.customerUpdateForm.get('contract');
+}
+
+
+onCustomerUpdate()
+{
+  const updateCustomer = this.customerUpdateForm.value;
+
+  this.customerService.updateCustomer(this.customerId,updateCustomer).subscribe(
+    response=>{
+      if(response)
+      {
+        console.log("Customers updated successfully");
+        this.router.navigate(['/customers'])
       }
-
-      this.customerService
-        .updateCustomer(this.customerId, customerData)
-        .subscribe({
-          next: (response) => {
-            console.log('Customer updated sucessfully', response);
-            this.router.navigate(['/customers']);
-          },
-          error: (error) => {
-            console.error(error);
-          },
-        });
     }
-  }
+  )
+}
+
+ 
+  
 }

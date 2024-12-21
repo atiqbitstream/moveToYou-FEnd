@@ -7,6 +7,7 @@ import { RiderCreateRes } from "../interfaces/riderResponse.interface";
 import { Observable } from "rxjs";
 import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
+import { User } from "../rider-update/rider-update.component";
 
 @Injectable({providedIn:"root"})
 export class RiderService
@@ -18,14 +19,27 @@ export class RiderService
     return this.http.post<RiderCreateRes>(`${environment.snbUrl}/user/createAsRider`,newRider)
   }
 
-  getAllRiders():Observable<Rider[]>
+  getAllRiders(organizationId:number):Observable<any[]>
   {
-    return this.http.get<Rider[]>(`${environment.snbUrl}/rider/getAllRiders`)
+    return this.http.get<any[]>(`${environment.snbUrl}/user/getAllRiders`,{
+      params:{organizationId:organizationId}
+     })
   }
 
-  getRider():Observable<Rider>
+  getRider(riderId:number):Observable<User | null>
   {
-    const currentRiderId=this.loginService.getUserIdFromLocalStorage();
-   return this.http.get<Rider>(`${environment.snbUrl}/user/getAsRider/${currentRiderId}`)
+   return this.http.get<User | null>(`${environment.snbUrl}/user/getAsRider`,{
+    params:{riderId:riderId}
+   })
+  }
+
+  updateRider(id:number, rider:Partial<User>)
+  {
+   return this.http.patch<User>(`${environment.snbUrl}/user/updateRider/${id}`,rider)
+  }
+
+  softDeleteRider(riderId:number)
+  {
+    return this.http.delete(`${environment.snbUrl}/user/deleteRider/${riderId}`)
   }
 }

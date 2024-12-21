@@ -1,4 +1,4 @@
-<a routerLink="/riders">Goto Riders home page</a>
+<!-- <a routerLink="/riders">Goto Riders home page</a>
 
 <h1>Create a Rider Here :</h1>
 
@@ -93,4 +93,334 @@
   </select><br><br>
 
   <button type="submit" [disabled]="riderCreationForm.invalid">Submit</button>
-</form>
+</form> -->
+
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+  <div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="mb-6">
+      <button
+        mat-raised-button
+        color="primary"
+        routerLink="/riders"
+        class="mb-4"
+      >
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+    </div>
+
+    <form
+      [formGroup]="riderCreationForm"
+      (ngSubmit)="onRiderCreate()"
+      class="bg-white shadow-md rounded-lg p-8 space-y-6"
+    >
+      <mat-form-field class="w-full">
+        <mat-label>Enter your user Name:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="username"
+          required
+          placeholder="Enter your username"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('username')?.invalid &&
+            (riderCreationForm.get('username')?.dirty ||
+              riderCreationForm.get('username')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('username')?.hasError('required')"
+            >Username is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('username')?.hasError('minlength')"
+            >Username must be at least 5 characters long</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your first Name:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="firstName"
+          required
+          placeholder="Enter your first name"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('firstName')?.invalid &&
+            (riderCreationForm.get('firstName')?.dirty ||
+              riderCreationForm.get('firstName')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('firstName')?.hasError('required')"
+            >First Name is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('firstName')?.hasError('minlength')"
+            >First name must be at least 5 characters long</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your last name:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="lastName"
+          required
+          placeholder="Enter your last name"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('lastName')?.invalid &&
+            (riderCreationForm.get('lastName')?.dirty ||
+              riderCreationForm.get('lastName')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('lastName')?.hasError('required')"
+            >Last Name is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('lastName')?.hasError('minlength')"
+            >Last name must be at least 5 characters long</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your phone number:</mat-label>
+        <input
+          matInput
+          type="tel"
+          formControlName="phoneNumber"
+          required
+          placeholder="Enter your phone number"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('phoneNumber')?.invalid &&
+            (riderCreationForm.get('phoneNumber')?.dirty ||
+              riderCreationForm.get('phoneNumber')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('phoneNumber')?.hasError('required')"
+            >Phone number is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('phoneNumber')?.hasError('minlength')"
+            >Phone number must be 11 digits long</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter Your Address:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="address"
+          placeholder="Enter your address"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('address')?.invalid &&
+            (riderCreationForm.get('address')?.dirty ||
+              riderCreationForm.get('address')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('address')?.hasError('required')"
+            >Address is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('address')?.hasError('maxlength')"
+            >Address max is 50 characters</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your Sector:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="sector"
+          placeholder="Enter your sector"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('sector')?.invalid &&
+            (riderCreationForm.get('sector')?.dirty ||
+              riderCreationForm.get('sector')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('sector')?.hasError('required')"
+            >Sector is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('sector')?.hasError('maxlength')"
+            >You cannot exceed 10 characters</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your street:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="street"
+          placeholder="Enter your street"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('street')?.invalid &&
+            (riderCreationForm.get('street')?.dirty ||
+              riderCreationForm.get('street')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('street')?.hasError('required')"
+            >Street is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('street')?.hasError('minlength')"
+            >It's too long! Try to make it short.</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your CNIC number:</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="cnicNumber"
+          placeholder="Enter your CNIC number"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('cnicNumber')?.invalid &&
+            (riderCreationForm.get('cnicNumber')?.dirty ||
+              riderCreationForm.get('cnicNumber')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('cnicNumber')?.hasError('required')"
+            >CNIC number is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('cnicNumber')?.hasError('minlength')"
+            >Your CNIC should be a 13 digit number</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('cnicNumber')?.hasError('pattern')"
+            >Invalid CNIC format (should be 1345-6789012-3)</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Enter your email:</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('email')?.invalid &&
+            (riderCreationForm.get('email')?.dirty ||
+              riderCreationForm.get('email')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('email')?.hasError('required')"
+            >Email is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('email')?.hasError('pattern')"
+            >Invalid email format (should be user&#64;example.com)</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Please Enter your password:</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+          required
+          placeholder="Enter your password"
+        />
+        <mat-error
+          *ngIf="
+            riderCreationForm.get('password')?.invalid &&
+            (riderCreationForm.get('password')?.dirty ||
+              riderCreationForm.get('password')?.touched)
+          "
+        >
+          <ng-container
+            *ngIf="riderCreationForm.get('password')?.hasError('required')"
+            >Password is required</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('password')?.hasError('minlength')"
+            >Password must be at least 6 characters long</ng-container
+          >
+          <ng-container
+            *ngIf="riderCreationForm.get('password')?.hasError('pattern')"
+            >Password must contain at least one uppercase letter, one lowercase
+            letter, one symbol, and one numeric value</ng-container
+          >
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Organization -->
+      <mat-form-field class="w-full">
+        <mat-label>Organization</mat-label>
+        <mat-select formControlName="organization">
+          <mat-option value="">Select Organization</mat-option>
+          <mat-option value="emaanDairy">Emaan Dairy</mat-option>
+          <mat-option value="newDairy">New Dairy</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Hidden Organization ID -->
+      <input type="hidden" formControlName="organizationId" />
+
+      <mat-form-field class="w-full">
+        <mat-label>Select The Role you want to give to User:</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="">Select A Role</mat-option>
+          <mat-option *ngFor="let role of roles" [value]="role">{{
+            role
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="flex justify-end">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="riderCreationForm.invalid"
+          class="w-full md:w-auto"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

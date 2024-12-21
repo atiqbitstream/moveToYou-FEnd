@@ -1,0 +1,181 @@
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="mb-6">
+      <button mat-raised-button color="primary" routerLink="/riders" class="mb-4">
+        <mat-icon>arrow_back</mat-icon> Back to Riders
+      </button>
+    </div>
+  
+    @if (isLoading) {
+      <mat-progress-spinner mode="indeterminate" diameter="50" class="mx-auto">
+      </mat-progress-spinner>
+    } @else {
+      <form [formGroup]="riderUpdateForm" (ngSubmit)="onRiderUpdate()" class="bg-white shadow-md rounded-lg p-8 space-y-6">
+        <h2 class="text-2xl font-bold mb-6 text-center">Update Rider Information</h2>
+  
+        <!-- Username -->
+        <mat-form-field class="w-full">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" placeholder="Enter username">
+          @if (username?.invalid && (username?.dirty || username?.touched)) {
+            <mat-error>
+              @if (username?.errors?.['required']) {
+                Username is required
+              } @else if (username?.errors?.['minlength']) {
+                Username must be at least 5 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- First Name -->
+        <mat-form-field class="w-full">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="firstName" placeholder="Enter first name">
+          @if (firstName?.invalid && (firstName?.dirty || firstName?.touched)) {
+            <mat-error>
+              @if (firstName?.errors?.['required']) {
+                First name is required
+              } @else if (firstName?.errors?.['minlength']) {
+                First name must be at least 5 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Last Name -->
+        <mat-form-field class="w-full">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="lastName" placeholder="Enter last name">
+          @if (lastName?.invalid && (lastName?.dirty || lastName?.touched)) {
+            <mat-error>
+              @if (lastName?.errors?.['required']) {
+                Last name is required
+              } @else if (lastName?.errors?.['minlength']) {
+                Last name must be at least 5 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Phone Number -->
+        <mat-form-field class="w-full">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="phoneNumber" placeholder="Enter phone number">
+          @if (phoneNumber?.invalid && (phoneNumber?.dirty || phoneNumber?.touched)) {
+            <mat-error>
+              @if (phoneNumber?.errors?.['required']) {
+                Phone number is required
+              } @else if (phoneNumber?.errors?.['pattern']) {
+                Phone number must be 11 digits
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Address -->
+        <mat-form-field class="w-full">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" placeholder="Enter address">
+          @if (address?.invalid && (address?.dirty || address?.touched)) {
+            <mat-error>
+              @if (address?.errors?.['maxlength']) {
+                Address cannot exceed 50 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Sector -->
+        <mat-form-field class="w-full">
+          <mat-label>Sector</mat-label>
+          <input matInput formControlName="sector" placeholder="Enter sector">
+          @if (sector?.invalid && (sector?.dirty || sector?.touched)) {
+            <mat-error>
+              @if (sector?.errors?.['maxlength']) {
+                Sector cannot exceed 10 characters
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Street -->
+        <mat-form-field class="w-full">
+          <mat-label>Street</mat-label>
+          <input matInput formControlName="street" placeholder="Enter street">
+        </mat-form-field>
+  
+        <!-- CNIC Number -->
+        <mat-form-field class="w-full">
+          <mat-label>CNIC Number</mat-label>
+          <input matInput formControlName="cnicNumber" placeholder="Enter CNIC number (e.g., 12345-1234567-1)">
+          @if (cnicNumber?.invalid && (cnicNumber?.dirty || cnicNumber?.touched)) {
+            <mat-error>
+              @if (cnicNumber?.errors?.['pattern']) {
+                Invalid CNIC format (should be like 12345-1234567-1)
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Email -->
+        <mat-form-field class="w-full">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="Enter email">
+          @if (email?.invalid && (email?.dirty || email?.touched)) {
+            <mat-error>
+              @if (email?.errors?.['pattern']) {
+                Invalid email format
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Organization -->
+        <mat-form-field class="w-full">
+          <mat-label>Organization</mat-label>
+          <mat-select formControlName="organization">
+            <mat-option value="emaanDairy">Emaan Dairy</mat-option>
+            <mat-option value="newDairy">New Dairy</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <!-- Role -->
+        <mat-form-field class="w-full">
+          <mat-label>Role</mat-label>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let role of roles" [value]="role">
+              {{role}}
+            </mat-option>
+          </mat-select>
+          @if (role?.invalid && (role?.dirty || role?.touched)) {
+            <mat-error>
+              @if (role?.errors?.['required']) {
+                Role is required
+              }
+            </mat-error>
+          }
+        </mat-form-field>
+  
+        <!-- Hidden Organization ID -->
+        <input type="hidden" formControlName="organizationId">
+  
+        <!-- Submit Button -->
+        <div class="flex justify-end space-x-4">
+          <button mat-raised-button routerLink="/riders" class="w-full md:w-auto">
+            Cancel
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="riderUpdateForm.invalid || isLoading"
+            class="w-full md:w-auto">
+            @if (isLoading) {
+              <mat-spinner diameter="20" class="inline mr-2"></mat-spinner>
+            }
+            Update Rider
+          </button>
+        </div>
+      </form>
+    }
+  </div>

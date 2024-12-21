@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
-import { decode } from 'punycode';
 
 interface TokenPayload {
   exp: number;
@@ -16,25 +14,36 @@ interface TokenPayload {
     role: string;
     organizationId: string;
     organization: string;
-   
   };
 }
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
-  constructor(private http: HttpClient) {}
-
   private readonly AUTH_KEY = 'authData';
 
-  setAuthData(authData:any):void
-  {
-    localStorage.setItem(this.AUTH_KEY, JSON.stringify(authData));
+  constructor(private http: HttpClient) {}
+
+  // Check if localStorage is available
+  private isLocalStorageAvailable(): boolean {
+    try {
+      return typeof window !== 'undefined' && !!window.localStorage;
+    } catch {
+      return false;
+    }
   }
 
-  getAuthData():any|null
-  {
-    const authData = localStorage.getItem(this.AUTH_KEY);
-    return authData ? JSON.parse(authData) : null;
+  setAuthData(authData: any): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem(this.AUTH_KEY, JSON.stringify(authData));
+    }
+  }
+
+  getAuthData(): any | null {
+    if (this.isLocalStorageAvailable()) {
+      const authData = localStorage.getItem(this.AUTH_KEY);
+      return authData ? JSON.parse(authData) : null;
+    }
+    return null;
   }
 
   getAccessToken(): string | null {
@@ -42,46 +51,47 @@ export class TokenService {
     return authData?.accessToken || null;
   }
 
-  clearAuthData():void {
-    localStorage.removeItem(this.AUTH_KEY);
+  getStoredOrgId(): string | null {
+    const authData = this.getAuthData();
+    return authData?.user?.organizationId || null;
   }
-  
-  logOut()
-  {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('user');
 
-    sessionStorage.clear();
+  clearAuthData(): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.removeItem(this.AUTH_KEY);
+    }
+  }
 
-
+  logOut(): void {
+    if (this.isLocalStorageAvailable()) {
+      localStorage.removeItem(this.AUTH_KEY);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      sessionStorage.clear();
+    }
   }
 
   isTokenExpired(): boolean {
     const token = this.getAccessToken();
-
     if (!token) {
-      return false;
+      return true;
     }
 
-    try{
+    try {
       const decoded = jwtDecode<TokenPayload>(token);
-      const currentTime = Math.floor(Date.now()/1000);
-      return decoded.exp> currentTime;
-    }catch(error)
-    {
-      return false;
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp < currentTime;
+    } catch {
+      return true; // Assume expired if decoding fails
     }
   }
 
-  geUserRole():string| null
-  {
+  geUserRole(): string | null {
     const authData = this.getAuthData();
     return authData?.user?.role || null;
   }
 
-  getUserId(): number| null
-  {
+  getUserId(): number | null {
     const authData = this.getAuthData();
     return authData?.user?.id || null;
   }

@@ -1,62 +1,83 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { RiderService } from '../services/rider.service';
 import { response } from 'express';
 import { error } from 'console';
 import { Rider } from '../interfaces/rider.interface';
 import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { TokenService } from '../../shared/services/token.service';
 
 @Component({
   selector: 'app-rider-list',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterLink,CommonModule, ReactiveFormsModule,MatIconModule,MatFormFieldModule,MatOptionModule,MatTableModule,MatChipsModule,MatPaginatorModule,MatSelectModule],
   templateUrl: './rider-list.component.html',
   styleUrl: './rider-list.component.css'
 })
 export class RiderListComponent implements OnInit {
 
   ngOnInit(): void {
-    this.onGetAllRiders();
-    this.getCurrentRider();
+    
   }
+
+  organizationId= new FormControl('');
 
   riders:Rider[]=[];
-  currentRider!:Rider;
-  showAllRiders: boolean = true; 
+ 
 
 
-  constructor(private riderService:RiderService){}
-
-
-  onGetAllRiders()
-  {
-    this.riderService.getAllRiders().subscribe({
-      next:(response)=>{
-        console.log("Here are all the riders from MTUB : ",response)
-        this.riders=response;
-      },
-      error:(err)=>{
-        console.log("The error from MTUB is : ",err)
-      }
-    })
+  constructor(private riderService:RiderService, private tokenService:TokenService){
+    this.onSendOrganizationId();
   }
 
-  getCurrentRider()
+  onSendOrganizationId()
   {
-    this.riderService.getRider().subscribe({
-      next:(response)=>{
-        console.log("The current rider is : ",response)
-        this.currentRider=response;
-      },
-      error:(err)=>{
-        console.log("Error from getting current rider is : ",err)
-      }
-    })
-  }
 
-  toggleShowMyProfile()
-  {
-    this.showAllRiders=!this.showAllRiders;
+   const orgId= this.tokenService.getStoredOrgId() ;
+   if(orgId!==null){
+     this.riderService.getAllRiders(+orgId).subscribe({
+       next:(response)=>{
+         this.riders=response
+       }
+     })
   }
+ }
+
+
+ onDeleteRider(riderId:number)
+ {
+   this.riderService.softDeleteRider(riderId).subscribe({
+    next:()=>{
+      this.riders.filter(rider=>rider.id)
+      console.log("Rider deleted successfully!")
+    },
+    error:(error)=>{
+      console.error('error deleting Rider : ',error)
+    }
+   })
+ }
+  
+
+  // getCurrentRider()
+  // {
+  //   this.riderService.getRider().subscribe({
+  //     next:(response)=>{
+  //       console.log("The current rider is : ",response)
+  //       this.currentRider=response;
+  //     },
+  //     error:(err)=>{
+  //       console.log("Error from getting current rider is : ",err)
+  //     }
+  //   })
+  // }
+
 
 }

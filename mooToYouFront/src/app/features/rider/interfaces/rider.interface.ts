@@ -10,4 +10,5 @@ export interface Rider {
     createdAt: string;
     updatedAt: string;
     isDeleted: boolean;
+    organization:string;
   }

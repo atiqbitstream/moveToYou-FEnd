@@ -41,10 +41,8 @@ export class LoginComponent implements OnInit {
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
-        Validators.pattern(/[A-Z]/),
-        Validators.pattern(/[a-z]/),
-        Validators.pattern(/[0-9]/),
-        Validators.pattern(/[\!@#\^\&*\)\(+=_-]/),
+        // Use a single pattern validator that matches at least one of each type
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/),
       ]),
     });
   }

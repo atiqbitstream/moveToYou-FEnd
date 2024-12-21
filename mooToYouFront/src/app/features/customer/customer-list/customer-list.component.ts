@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { TokenService } from '../../shared/services/token.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -42,16 +43,17 @@ displayedColumns: string[] = [
   'actions'
 ];
 
-@ViewChild(MatPaginator) paginator!: MatPaginator;
-dataSource!: MatTableDataSource<ICustomer>;
 
-constructor(private customerService:CustomerService, private dialog:MatDialog){}
+
+constructor(private customerService:CustomerService, private tokenService:TokenService){
+  this.onSendOrganizationId();
+}
 
    onSendOrganizationId()
    {
 
-    const orgId= this.organizationId.value ;
-    if(orgId!==null && orgId!==''){
+    const orgId= this.tokenService.getStoredOrgId() ;
+    if(orgId!==null ){
       this.customerService.fetchCustomersByOrganization(+orgId).subscribe({
         next:(response)=>{
           this.customers=response
