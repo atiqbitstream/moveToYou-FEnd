@@ -1,30 +1,43 @@
+
 <div class="container mx-auto px-4 py-8 max-w-7xl">
   <!-- Go Back Button -->
   <div class="mb-6">
-    <button mat-raised-button color="primary" routerLink="/riders" class="mb-4">
+    <button mat-raised-button color="primary" routerLink="/customers" class="mb-4">
       <mat-icon>arrow_back</mat-icon> Go Back
     </button>
   </div>
-  
-  
+
+  <!-- Page Title -->
+  <h2 class="text-2xl font-bold mb-6 text-center">
+    Assign Customer to Rider
+  </h2>
 
   <!-- Riders List for Mobile -->
   <div class="bg-white shadow-md rounded-lg">
     <div *ngFor="let rider of riders" class="border-b last:border-b-0 p-4">
       <div class="flex justify-between items-center mb-2">
-        <div class="font-bold">
-          {{rider?.firstName}} {{rider?.lastName}}
-          <span class="ml-2 text-sm text-gray-500">({{rider?.organization}})</span>
+        <div class="flex items-center">
+          <div class="font-bold mr-4">
+            {{rider?.firstName}} {{rider?.lastName}}
+            <span class="ml-2 text-sm text-gray-500">({{rider?.organization}})</span>
+          </div>
+          <mat-chip-listbox>
+            <mat-chip-option
+              [selected]="!rider?.isDeleted"
+              [color]="!rider?.isDeleted ? 'primary' : 'warn'">
+              {{!rider?.isDeleted ? 'Active' : 'Inactive'}}
+            </mat-chip-option>
+          </mat-chip-listbox>
         </div>
-        <mat-chip-listbox>
-          <mat-chip-option
-            [selected]="!rider?.isDeleted"
-            [color]="!rider?.isDeleted ? 'primary' : 'warn'">
-            {{!rider?.isDeleted ? 'Active' : 'Inactive'}}
-          </mat-chip-option>
-        </mat-chip-listbox>
 
-        
+        <!-- Assign Button -->
+        <button 
+          mat-raised-button 
+          color="accent" 
+          (click)="assignCustomerToRider(rider)"
+          class="ml-4">
+          <mat-icon>assignment</mat-icon> Assign
+        </button>
       </div>
       
       <div class="grid grid-cols-2 gap-2 text-sm mb-2">
@@ -43,6 +56,7 @@
         <div>
           <strong>CNIC:</strong> {{rider?.cnicNumber}}
         </div>
+       
       </div>
       
       <div class="flex justify-end space-x-2">

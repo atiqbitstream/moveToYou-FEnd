@@ -6,12 +6,14 @@ import { CustomerComponent } from './customer.component';
 import { RoleGuard } from '../shared/guards/role.guard';
 import { ERole } from '../shared/enums/roles.enum';
 import { CustomerUpdateComponent } from './customer-update/customer-update.component';
+import { AssignCustomerComponent } from './assign-customer/assign-customer.component';
 
 const routes: Routes = [
   {path:'',component:CustomerComponent},
   {path : 'create', component:CustomerCreateComponent},
   {path:'list', component:CustomerListComponent},
-  {path:'update/:id/:orgId',component:CustomerUpdateComponent}
+  {path:'update/:id',component:CustomerUpdateComponent},
+  {path:'assignCustomer/:customerId',component:AssignCustomerComponent}
 ];
 
 @NgModule({

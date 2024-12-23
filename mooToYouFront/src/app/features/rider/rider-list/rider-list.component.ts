@@ -65,6 +65,10 @@ export class RiderListComponent implements OnInit {
    })
  }
   
+ assignCustomerToRider(riderId:number)
+ {
+  console.log(riderId);
+ }
 
   // getCurrentRider()
   // {

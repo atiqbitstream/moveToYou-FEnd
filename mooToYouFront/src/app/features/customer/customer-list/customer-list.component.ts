@@ -80,6 +80,10 @@ onSendOrganizationId() {
     })
   }
 
+  assignCustomerToRider(customerId:number)
+  {
+    
+  }
 
 
 }

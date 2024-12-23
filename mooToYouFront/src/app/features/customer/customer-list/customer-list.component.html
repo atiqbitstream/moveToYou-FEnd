@@ -42,13 +42,14 @@
           <div>
             <strong>Contract:</strong> {{customer.contract}}
           </div>
+          
         </div>
   
         <div class="flex justify-end space-x-2">
           <button 
             mat-mini-fab 
             color="primary" 
-            [routerLink]="['/customers/update', customer.id, customer.organizationId]">
+            [routerLink]="['/customers/update', customer.id]">
             <mat-icon>edit</mat-icon>
           </button>
           <button 
@@ -56,6 +57,13 @@
             color="warn" 
             (click)="onDeleteCustomer(customer.id)">
             <mat-icon>delete</mat-icon>
+          </button>
+          <button 
+            mat-mini-fab 
+            color="accent" 
+            [routerLink]="['/customers/assignCustomer',customer.id]"
+            >
+            <mat-icon>delivery_dining</mat-icon> 
           </button>
         </div>
       </div>

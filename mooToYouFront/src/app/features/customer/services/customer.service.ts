@@ -34,6 +34,13 @@ export class CustomerService
      return this.http.patch(`${environment.mtuUrl}/customer/update/${id}`,updatedCustomer)
   }
 
+  assignCustomerToRider(payload: { riderId: number; customerId: number }): Observable<any> {
+   return this.http.post(
+     `${environment.mtuUrl}/rider/assignCustomer/${payload.riderId}`,
+     { customerId: payload.customerId }
+   );
+ }
+
   softDeleteCustomer(customerId:number)
   {
   return this.http.delete(`${environment.mtuUrl}/customer/delete/${customerId}`)
