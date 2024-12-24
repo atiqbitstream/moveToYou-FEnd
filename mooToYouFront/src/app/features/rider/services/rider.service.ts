@@ -9,6 +9,7 @@ import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
 import { User } from "../rider-update/rider-update.component";
 import { Customer } from "../../customer/customer-update/customer-update.component";
+import {  DailyDeliveryWithCustomer } from "../daily-delivery/daily-delivery.component";
 
 @Injectable({providedIn:"root"})
 export class RiderService
@@ -52,5 +53,10 @@ export class RiderService
   assignDailyDelivery(customerId:number)
   {
     return this.http.post(`${environment.mtuUrl}/rider/createDailyDelivery`,{customerId})
+  }
+
+  getDailyDelveries():Observable<DailyDeliveryWithCustomer[]>
+  {
+    return this.http.get<DailyDeliveryWithCustomer[]>(`${environment.mtuUrl}/rider/getDailyDelivery`);
   }
 }
