@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
 import { User } from "../rider-update/rider-update.component";
+import { Customer } from "../../customer/customer-update/customer-update.component";
 
 @Injectable({providedIn:"root"})
 export class RiderService
@@ -41,5 +42,15 @@ export class RiderService
   softDeleteRider(riderId:number)
   {
     return this.http.delete(`${environment.snbUrl}/user/deleteRider/${riderId}`)
+  }
+
+  getAssignedCustomersForRider(riderId:number):Observable<Customer[]>
+  {
+    return this.http.get<Customer[]>(`${environment.mtuUrl}/rider/getAssignedCustomers/${riderId}`)
+  }
+
+  assignDailyDelivery(customerId:number)
+  {
+    return this.http.post(`${environment.mtuUrl}/rider/createDailyDelivery`,{customerId})
   }
 }

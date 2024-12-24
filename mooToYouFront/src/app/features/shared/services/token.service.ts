@@ -23,6 +23,12 @@ export class TokenService {
 
   constructor(private http: HttpClient) {}
 
+  getUser()
+  {
+    const authData = this.getAuthData();
+    return authData?.user;
+  }
+
   // Check if localStorage is available
   private isLocalStorageAvailable(): boolean {
     try {
@@ -91,8 +97,8 @@ export class TokenService {
     return authData?.user?.role || null;
   }
 
-  getUserId(): number | null {
+  getUserId(): number  {
     const authData = this.getAuthData();
-    return authData?.user?.id || null;
+    return authData?.user?.id ;
   }
 }

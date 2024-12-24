@@ -1,0 +1,72 @@
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+  <!-- Go Back Button -->
+  <div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="mb-6">
+      <button mat-raised-button color="primary" routerLink="/riders" class="mb-4">
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+    </div>
+
+    <!-- Customers List for Mobile -->
+    <div class="bg-white shadow-md rounded-lg">
+      <div *ngFor="let customer of customers" class="border-b last:border-b-0 p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+        <div class="flex-grow">
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-bold">
+              {{customer.firstName}} {{customer.lastName}}
+              <span class="ml-2 text-sm text-gray-500">({{customer.organization}})</span>
+            </div>
+            <mat-chip-listbox>
+              <mat-chip-option
+                [selected]="customer.status === true"
+                [color]="customer.status === true ? 'primary' : 'warn'">
+                {{customer.status === true ? 'Active' : 'Inactive'}}
+              </mat-chip-option>
+            </mat-chip-listbox>
+             <!-- Select Button with Icon -->
+        <button 
+        mat-fab 
+        color="primary" 
+        class="ml-4 scale-75 hover:scale-90 transition-transform"
+        (click)="openCustomerSelectionDialog(customer)"
+      >
+        <mat-icon>add_box</mat-icon>
+      </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-sm mb-2">
+            <div>
+              <strong>Phone:</strong> {{customer.phoneNumber}}
+            </div>
+            <div>
+              <strong>Address:</strong> {{customer.address}}
+            </div>
+            <div>
+              <strong>Sector:</strong> {{customer.sector}}
+            </div>
+            <div>
+              <strong>Street:</strong> {{customer.street}}
+            </div>
+            <div>
+              <strong>Google Pin:</strong> {{customer.googlePin}}
+            </div>
+            <div>
+              <strong>Contract:</strong> {{customer.contract}}
+            </div>
+          </div>
+        </div>
+
+       
+      </div>
+
+      <!-- Mobile Pagination -->
+      <div class="flex justify-center p-4">
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          class="w-full">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
