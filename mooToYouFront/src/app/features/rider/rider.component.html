@@ -18,6 +18,8 @@
   
     <mat-menu #customerMenu="matMenu" 
               class="hover-menu">
+
+              <ng-container *ngIf="authService.getUserRole() !== 'RIDER'">
       <button mat-menu-item routerLink="/riders/create">
         <mat-icon>add</mat-icon>
         <span>Create Rider</span>
@@ -26,6 +28,7 @@
         <mat-icon>list</mat-icon>
         <span>List Riders</span>
       </button>
+      </ng-container>
       <button mat-menu-item routerLink="/riders/assignedCustomers">
         <mat-icon>group</mat-icon>
         <span>Assigned Customers</span>

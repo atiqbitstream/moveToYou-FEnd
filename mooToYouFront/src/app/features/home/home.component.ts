@@ -7,12 +7,13 @@ import { ERole } from '../shared/enums/roles.enum';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   changeDetection:ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, MatCardModule, 
+  imports: [RouterLink,CommonModule, MatCardModule, 
     MatButtonModule,MatRippleModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -23,6 +24,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.userRole= this.homeService.getUserRole();
+
+    // If rider, remove only the Customers Section route
+    if (this.userRole === 'RIDER') {
+      this.moduleRoutes = this.moduleRoutes.filter(
+        route => route.path !== '/customers'
+      );
+    }
   }
 
   constructor(private homeService:HomeService)
@@ -30,7 +38,7 @@ export class HomeComponent implements OnInit {
    
   }
 
- readonly moduleRoutes = [
+  moduleRoutes = [
     {path:'/customers', label:'Go To Customers Section'},
     {path:'/riders',label:'Go To Riders Section'},
     {path:'', label:'Login Again'}

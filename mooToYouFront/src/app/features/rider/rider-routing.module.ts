@@ -7,6 +7,7 @@ import { RiderListComponent } from './rider-list/rider-list.component';
 import { RiderUpdateComponent } from './rider-update/rider-update.component';
 import { CustomersAssignedComponent } from './customers-assigned/customers-assigned.component';
 import { DailyDeliveryComponent } from './daily-delivery/daily-delivery.component';
+import { DeliveryItemComponent } from './delivery-item/delivery-item.component';
 
 const routes: Routes = [
   {path:'',component:RiderComponent},
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path:'list',component:RiderListComponent},
   {path:'update/:id',component:RiderUpdateComponent},
   {path:'assignedCustomers',component:CustomersAssignedComponent},
-  {path:'dailyDeliveries',component:DailyDeliveryComponent}
+  {path:'dailyDeliveries',component:DailyDeliveryComponent},
+  {path:'deliveryItem',component:DeliveryItemComponent}
  
 ];
 

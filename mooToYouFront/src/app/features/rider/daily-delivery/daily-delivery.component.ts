@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatListModule} from '@angular/material/list';
 import { MatOptionModule, provideNativeDateAdapter } from '@angular/material/core';
 import { RiderService } from '../services/rider.service';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink } from '@angular/router';
-import { Customer } from '../../customer/customer-update/customer-update.component';
+import { Router, RouterLink } from '@angular/router';
 import { TokenService } from '../../shared/services/token.service';
+
 
 export interface DailyDeliveryWithCustomer {
   id: number;
@@ -32,6 +30,25 @@ export interface DailyDeliveryWithCustomer {
   };
   
 }
+
+export interface DailyDeliveryWithCustomernDeliveryItems {
+  id: number;
+  date: Date;
+  customer: {
+    id: number;
+    firstName: string;
+  };
+  deliveryItems:{
+    id: number;
+  date: string;
+  Qty: number;
+  price: number;
+  productId: number;
+  dailyDeliveryId: number;
+  }
+}
+
+
 
 
 @Component({
@@ -58,7 +75,7 @@ export class DailyDeliveryComponent implements OnInit{
     this.onGetAssignedDailyDelveries();
   }
 
-  constructor(private riderService:RiderService, private tokenService:TokenService){}
+  constructor(private riderService:RiderService, private tokenService:TokenService, private router:Router){}
 
  
 
@@ -71,6 +88,15 @@ export class DailyDeliveryComponent implements OnInit{
         }
       }
     )
+  }
+
+  // Method to navigate with daily delivery ID
+  navigateToDeliveryItems(dailyDeliveryId:number) {
+    this.router.navigate(['/riders/deliveryItem'], {
+      state: { 
+        dailyDeliveryId,
+      }
+    });
   }
 
  

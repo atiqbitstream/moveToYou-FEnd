@@ -5,11 +5,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rider',
   standalone: true,
-  imports: [RouterLink,  MatToolbarModule,
+  imports: [RouterLink,CommonModule,  MatToolbarModule,
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
@@ -19,6 +21,6 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 })
 export class RiderComponent {
 
-  
+  constructor(public authService:AuthService){}
 
 }
