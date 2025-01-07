@@ -1,3 +1,4 @@
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +17,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import {CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray} from '@angular/cdk/drag-drop';
+import { ConfirmationDialogComponent } from '../../shared/components/layout/confirmation-dialog/confirmation-dialog.component';
+import { response } from 'express';
+import { error } from 'console';
 
 
 export interface DailyDeliveryWithCustomer {
@@ -58,6 +63,12 @@ interface DeliveryItem {
   };
 }
 
+export interface RouteASC
+{
+  customerId:number;
+  index:number;
+
+}
 
 
 
@@ -69,7 +80,11 @@ interface DeliveryItem {
     MatIconModule,
     MatFormFieldModule, MatInputModule, 
     MatMenuModule,
-    MatButtonModule],
+    MatButtonModule,
+    CdkDropList, CdkDrag,
+    MatSnackBarModule,
+
+  ],
   providers:[provideNativeDateAdapter()],
   templateUrl: './daily-delivery.component.html',
   styleUrl: './daily-delivery.component.css'
@@ -79,12 +94,70 @@ export class DailyDeliveryComponent implements OnInit{
  
 // Table Configuration
 displayedColumns: string[] = [
+
   'customerId',
   'date', 
   'customer', 
   'deliveryItems', 
   'actions'
 ];
+
+routeOrder:Array<{customerId:number, index:number}>=[];
+
+drop(event:CdkDragDrop<DailyDeliveryWithCustomernDeliveryItems[]>)
+{
+  const previousIndex = this.dataSource.data.findIndex(d=>d ===event.item.data);
+
+  moveItemInArray(this.dataSource.data,previousIndex,event.currentIndex);
+  
+  this.dataSource.data=[...this.dataSource.data];
+
+  
+
+}
+
+updateRouteOrder ()
+{
+  this.routeOrder=this.dataSource.data.map((delivery,index)=>({
+    customerId:delivery.customer.id,
+    index : index+1
+  }))
+
+  console.log('current route order : ',this.routeOrder);
+}
+
+confirmReorder()
+{
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+    width:'350px',
+    data:{
+      title:'Confirm Reorder',
+      message: 'Are you sure want to save this route order?'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(result=>{
+    if(result)
+    {
+      this.updateRouteOrder();
+      this.submitRouteOrder();
+    }
+  })
+}
+
+submitRouteOrder()
+{
+  console.log("The route order before sending is : ",this.routeOrder)
+    this.riderService.updateRouteOrder(this.routeOrder).subscribe({
+     
+      next:(response)=>{
+        this.snackBar.open('Route order updated successfully!','close',{
+          duration:3000
+        });
+       
+      }
+    })
+}
 
 
   dailyDeliveries:DailyDeliveryWithCustomernDeliveryItems[]=[];
@@ -106,7 +179,7 @@ displayedColumns: string[] = [
   // Pagination
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private riderService:RiderService, private tokenService:TokenService, private router:Router, private dialog: MatDialog){}
+  constructor(private riderService:RiderService, private tokenService:TokenService, private router:Router, private dialog: MatDialog, private snackBar:MatSnackBar){}
 
  // Optional: Add filtering
  applyFilter(event: Event) {

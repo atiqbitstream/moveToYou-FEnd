@@ -9,6 +9,7 @@ import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
 import { User } from "../rider-update/rider-update.component";
 import { Customer } from "../../customer/customer-update/customer-update.component";
+import {RouteASC} from "../daily-delivery/daily-delivery.component"
 import {  DailyDeliveryWithCustomer, DailyDeliveryWithCustomernDeliveryItems } from "../daily-delivery/daily-delivery.component";
 import { DeliveryItem, Product } from "../delivery-item/delivery-item.component";
 
@@ -75,5 +76,11 @@ export class RiderService
   addDeliveryItems(newDeliveryItems:DeliveryItem)
   {
    return this.http.post(`${environment.mtuUrl}/rider/createDeliveryItem`,newDeliveryItems)
+  }
+
+
+  updateRouteOrder(newRouteData:RouteASC[])
+  {
+return this.http.patch<RouteASC>(`${environment.mtuUrl}/rider/updateRoutes`,newRouteData)
   }
 }

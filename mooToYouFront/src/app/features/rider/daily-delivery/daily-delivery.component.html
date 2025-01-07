@@ -50,7 +50,12 @@
 
   <!-- Responsive Table Container -->
   <div class="overflow-x-auto shadow-md rounded-lg">
-    <table mat-table [dataSource]="dataSource" class="w-full">
+    <table mat-table [dataSource]="dataSource" class="w-full" cdkDropList (cdkDropListDropped)="drop($event)">
+
+  
+
+      
+
       <!-- Customer ID Column -->
       <ng-container matColumnDef="customerId">
         <th mat-header-cell *matHeaderCellDef class="font-bold text-gray-700 px-4">
@@ -128,8 +133,21 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag 
+      [cdkDragData]="row"
+      class="cursor-move"></tr>
     </table>
+
+     <!-- Confirm Reorder Button -->
+     <div class="p-4 text-right">
+      <button 
+        mat-raised-button 
+        color="primary" 
+        (click)="confirmReorder()"
+      >
+        Confirm Reorder
+      </button>
+    </div>
 
     <mat-paginator 
       [pageSizeOptions]="[5, 10, 20]"
