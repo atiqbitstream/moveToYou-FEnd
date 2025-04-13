@@ -102,7 +102,7 @@ displayedColumns: string[] = [
   'actions'
 ];
 
-routeOrder:Array<{customerId:number, index:number}>=[];
+routeOrder:{customerId:number, index:number}[]=[];
 
 drop(event:CdkDragDrop<DailyDeliveryWithCustomernDeliveryItems[]>)
 {
@@ -188,7 +188,7 @@ submitRouteOrder()
 }
 
 // New property for total bill
-totalBill: number = 0;
+totalBill = 0;
   originalDeliveries: DailyDeliveryWithCustomernDeliveryItems[] = [];
 
   onGetAssignedDailyDelveries() {
@@ -294,6 +294,7 @@ totalBill: number = 0;
 
   // Method to navigate with daily delivery ID
   navigateToDeliveryItems(dailyDeliveryId:number) {
+    console.log("passing dailyDleiveryId to delivery item page : ",dailyDeliveryId)
     this.router.navigate(['/riders/deliveryItem'], {
       state: { 
         dailyDeliveryId,

@@ -11,7 +11,9 @@ import { User } from "../rider-update/rider-update.component";
 import { Customer } from "../../customer/customer-update/customer-update.component";
 import {RouteASC} from "../daily-delivery/daily-delivery.component"
 import {  DailyDeliveryWithCustomer, DailyDeliveryWithCustomernDeliveryItems } from "../daily-delivery/daily-delivery.component";
-import { DeliveryItem, Product } from "../delivery-item/delivery-item.component";
+
+import { FormArray } from "@angular/forms";
+import { Product, CreateDeliveryItems } from "../../shared/models/types";
 
 @Injectable({providedIn:"root"})
 export class RiderService
@@ -72,8 +74,8 @@ export class RiderService
     return this.http.get<Product[]>(`${environment.mtuUrl}/rider/getAllProducts`);
   }
 
-
-  addDeliveryItems(newDeliveryItems:DeliveryItem)
+  
+  addDeliveryItems(newDeliveryItems:CreateDeliveryItems)
   {
    return this.http.post(`${environment.mtuUrl}/rider/createDeliveryItem`,newDeliveryItems)
   }

@@ -20,7 +20,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     {
 
     const authData = localStorage.getItem('authData');
-    let accessToken:string='';
+    let accessToken='';
 
     if(authData)
     {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {MatDrawer, MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { MaterialService } from '../../../services/material.service';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   showFiller = false;
 
   @ViewChild('drawer', { static: false }) drawer!: MatDrawer; // Reference to the drawer
