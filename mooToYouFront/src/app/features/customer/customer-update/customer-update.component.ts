@@ -32,12 +32,15 @@ export interface Customer
   address: string;
   sector: string;
   street: string;
-  googlePin: string;
+  googlePin: {latitude:number; longitude:number};
   homePicture: string;
   organization: string;
   organizationId:number
   status: boolean;
   contract: string;
+  mapUrl?: string;
+  
+  dailyDeliveries?:string[];
 
 }
 

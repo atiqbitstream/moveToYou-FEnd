@@ -1,3 +1,4 @@
+import { response } from 'express';
 import { TokenService } from './../../shared/services/token.service';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -28,6 +29,9 @@ import { firstValueFrom } from 'rxjs';
 })
 export class CustomersAssignedComponent implements OnInit {
 
+
+  mapUrl!:string;
+
   ngOnInit(): void {
     this.riderId=this.tokenService.getUserId();
     this.onGetAssignedCustomers(this.riderId);
@@ -48,6 +52,20 @@ onGetAssignedCustomers(riderId:number)
   this.riderService.getAssignedCustomersForRider(riderId).subscribe({
     next:(response)=>{
       this.customers=response;
+      console.log("Api response of customers : ",response )
+
+      this.customers.forEach(customer=>{
+        console.log('Google pin log  : ',customer.googlePin);
+        const lat=customer.googlePin.latitude;
+        const long =customer.googlePin.longitude;
+
+        if(lat && long)
+        {
+          this.mapUrl=`https://www.google.com/maps?q=${lat},${long}`
+        }
+      });
+
+      
     }
   })
 }
@@ -81,8 +99,8 @@ onGetAssignedCustomers(riderId:number)
          this.riderService.assignDailyDelivery(customer.id)
       );
 
-      this.showSuccessMessage('Customer assigned successfully');
-      this.router.navigate(['/customers']);
+      this.showSuccessMessage('Delivery assigned successfully');
+      this.router.navigate(['/riders/dailyDeliveries']);
     }
   } catch (error) {
     console.error('Error in assignment process:', error);
