@@ -1,98 +1,96 @@
-<div class="container mx-auto px-4 py-8 max-w-md">
-    <!-- Page Header -->
-    <div class="mb-6 flex justify-between items-center">
-      <h2 class="text-2xl font-semibold text-gray-800">Add Delivery Item</h2>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+  <!-- Page Header -->
+  <div class="mb-6 flex justify-between items-center">
+    <h2 class="text-2xl font-semibold text-gray-800">Add Delivery Items</h2>
+    <button
+      mat-icon-button
+      color="primary"
+      routerLink="/riders/dailyDeliveries"
+      aria-label="Go back"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+
+  <!-- Delivery Items Table -->
+  <form [formGroup]="deliveryItemForm" (ngSubmit)="submitDeliveryItems()" class="bg-white shadow-md rounded-lg p-6">
+    <table class="w-full mb-4">
+      <thead>
+        <tr class="text-left border-b-2 border-gray-200">
+          <th class="pb-2">Product</th>
+          <th class="pb-2">Unit Price</th>
+          <th class="pb-2">Quantity</th>
+          <th class="pb-2 text-right">Total Price</th>
+        </tr>
+      </thead>
+      <tbody formArrayName="items">
+        <tr *ngFor="let item of deliveryItemsFormArray.controls; let i = index" [formGroupName]="i">
+          <td class="py-2">
+            {{ products[i].name }}
+            <input type="hidden" formControlName="productId">
+          </td>
+          <td class="py-2">
+            PKR {{ item.get('unitPrice')?.value | number:'1.2-2' }}
+          </td>
+          <td class="py-2">
+            <div class="flex items-center gap-2">
+              <button 
+                mat-icon-button 
+                type="button" 
+                (click)="decrementQuantity(i)"
+                [disabled]="item.get('quantity')?.value === 0"
+              >
+                <mat-icon>remove</mat-icon>
+              </button>
+              <input
+                class="w-16 text-center border rounded"
+                type="number"
+                formControlName="quantity"
+                min="0"
+              >
+              <button 
+                mat-icon-button 
+                type="button" 
+                (click)="incrementQuantity(i)"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </td>
+          <td class="py-2 text-right">
+            PKR {{ (item.get('quantity')?.value * item.get('unitPrice')?.value || 0) | number:'1.2-2' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Grand Total -->
+    <div class="bg-gray-50 rounded-md p-3 mb-4 text-right">
+      <p class="text-lg font-semibold">
+        Grand Total: PKR {{ totalPrice | number:'1.2-2' }}
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-between space-x-4">
       <button 
-        mat-icon-button 
-        color="primary" 
-        routerLink="/riders/dailyDeliveries"
-        aria-label="Go back"
+        mat-stroked-button 
+        type="button" 
+        color="warn"
+        (click)="onCancel()"
+        class="flex-grow"
       >
-        <mat-icon>arrow_back</mat-icon>
+        Cancel
+      </button>
+      <button 
+        mat-raised-button 
+        type="submit" 
+        color="primary"
+        [disabled]="deliveryItemForm.invalid || totalPrice === 0"
+        class="flex-grow"
+      >
+        Save Items
       </button>
     </div>
-  
-    <!-- Delivery Item Form -->
-    <form [formGroup]="deliveryItemForm" (ngSubmit)="onSubmit()" class="bg-white shadow-md rounded-lg p-6">
-      <!-- Product Dropdown -->
-      <mat-form-field class="w-full mb-4">
-        <mat-label>Select Products</mat-label>
-        <mat-select 
-          formControlName="productId" 
-          multiple 
-          required
-        >
-          <mat-option *ngFor="let product of products" [value]="product.id">
-            {{product.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="deliveryItemForm.get('products')?.invalid">
-          Please select at least one product
-        </mat-error>
-      </mat-form-field>
-  
-      <!-- Quantity Input -->
-      <div class="flex space-x-4 mb-4">
-        <mat-form-field  class="w-1/2">
-          <mat-label>Quantity</mat-label>
-          <input 
-            matInput 
-            type="number" 
-            formControlName="Qty" 
-            min="1"
-            required
-          >
-          <mat-error >
-            Quantity must be at least 1
-          </mat-error>
-        </mat-form-field>
-  
-        <!-- Price Input -->
-        <mat-form-field  class="w-1/2">
-          <mat-label>Price (PKR)</mat-label>
-          <input 
-            matInput 
-            type="number" 
-            formControlName="price" 
-            min="0"
-            required
-          >
-          <mat-error >
-            Price must be a positive number
-          </mat-error>
-        </mat-form-field>
-      </div>
-  
-      <!-- Total Price Calculation -->
-      <div class="bg-gray-50 rounded-md p-3 mb-4 text-right">
-        <p class="text-lg font-semibold">
-          Total: 
-          <span class="text-primary">
-           
-          </span>
-        </p>
-      </div>
-  
-      <!-- Action Buttons -->
-      <div class="flex justify-between space-x-4">
-        <button 
-          mat-stroked-button 
-          type="button" 
-          color="warn"
-          (click)="onCancel()"
-          class="flex-grow"
-        >
-          Cancel
-        </button>
-        <button 
-          mat-raised-button 
-          type="submit" 
-          color="primary"
-          [disabled]="deliveryItemForm.invalid"
-          class="flex-grow"
-        >
-          Add Item
-        </button>
-      </div>
-    </form>
-  </div>
+  </form>
+</div>
