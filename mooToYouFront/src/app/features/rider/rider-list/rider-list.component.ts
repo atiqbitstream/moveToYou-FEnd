@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { RiderService } from '../services/rider.service';
-import { response } from 'express';
-import { error } from 'console';
 import { Rider } from '../interfaces/rider.interface';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
