@@ -1,189 +1,113 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  FormControl,
   FormGroup,
-  ReactiveFormsModule,
   Validators,
+  ReactiveFormsModule,
+  FormBuilder,
 } from '@angular/forms';
-import { RouterLink, RouterModule } from '@angular/router';
-import { RiderService } from '../services/rider.service';
-import { createRider } from '../interfaces/riderCreate.interface';
-import { response } from 'express';
-import { ERole } from '../../shared/enums/roles.enum';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { RiderService } from '../services/rider.service';
+import { ERole } from '../../shared/enums/roles.enum';
+import { Organization } from '../../shared/interfaces/organization.interface';
+import { NotificationService } from '../../shared/services/notification.service';
+import { LoggerService } from '../../shared/services/logger.service';
+import { FormBaseService } from '../services/form-base.service';
+import { Subject, takeUntil } from 'rxjs';
+
+/**
+ * RiderCreateComponent
+ * ---------------------
+ * Standalone Angular component for creating new rider accounts with validation and role/organization selections.
+ * Uses FormBaseService for shared form logic and validation.
+ * Submits form data to the RiderService, shows notifications on success or failure.
+ */
 
 @Component({
   selector: 'app-rider-create',
   standalone: true,
+  templateUrl: './rider-create.component.html',
+  styleUrl: './rider-create.component.css',
   imports: [
-    RouterLink,
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
   ],
-  templateUrl: './rider-create.component.html',
-  styleUrl: './rider-create.component.css',
 })
-export class RiderCreateComponent implements OnInit {
-  riderCreationForm!: FormGroup;
+export class RiderCreateComponent
+  extends FormBaseService
+  implements OnInit, OnDestroy
+{
 
+   /** Observable cleanup subject */
+  private destroy$ = new Subject<void>();
+
+   /** List of roles available for selection */
   roles = Object.values(ERole);
 
-  constructor(private riderService: RiderService) {}
+  constructor(
+    fb: FormBuilder,
+    private riderService: RiderService,
+    private snackBar: MatSnackBar,
+    notification: NotificationService,
+    logger: LoggerService,
+    private router: Router
+  ) {
+    // Calls base class constructor with password field enabled
+    super(fb, notification, logger, true);
+  }
 
+   /** Lifecycle hook: Initializes the organization listener */
   ngOnInit(): void {
-    this.riderCreationForm = new FormGroup({
-      username: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-      ]),
-      firstName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-      ]),
-      lastName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(5),
-      ]),
-      phoneNumber: new FormControl('', [
-        Validators.required,
-        Validators.minLength(11),
-        Validators.pattern(/[0-9]/),
-      ]),
-      address: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(50),
-      ]),
-      sector: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(10),
-      ]),
-      cnicNumber: new FormControl('', [
-        Validators.required,
-        Validators.minLength(13),
-        Validators.pattern('^\\d{5}-\\d{7}-\\d{1}$'),
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$'),
-      ]),
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.pattern(/[A-Z]/),
-        Validators.pattern(/[a-z]/),
-        Validators.pattern(/[0-9]/),
-        Validators.pattern(/[\!@#\^\&*\)\(+=_-]/),
-      ]),
-      role: new FormControl('', [Validators.required]),
-      street: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
+    this.setupOrganizationListener();
+  }
 
-      organization: new FormControl('', [
-        Validators.required,
-  
-      ]),
+  /**
+   * Submits the form to create a new rider
+   * Validates first, then calls rider service
+   */
 
-      organizationId: new FormControl(''),
-    });
+  onSubmit(): void {
+    if (!super.validateForm('creating rider')) return;
 
-    this.riderCreationForm
-      .get('organization')
-      ?.valueChanges.subscribe((org) => {
-        this.setOrganizationId(org);
+    this.riderService
+      .createAsRider(this.form.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.handleSuccess(),
+        error: (err) => super.handleFormError(err, 'Rider creation'),
       });
   }
 
-  get username() {
-    return this.riderCreationForm.get('username');
+  /**
+   * Called after successful rider creation
+   * Shows notification, logs event, resets form, navigates back
+   */
+
+  private handleSuccess(): void {
+    this.notification.show('Rider Created Successfully');
+    this.logger.log('New rider created', this.form.value);
+    this.form.reset();
+    this.router.navigate(['/riders']);
   }
 
-  get firstName() {
-    return this.riderCreationForm.get('firstName');
-  }
+   /** Lifecycle hook: Clean up subscriptions */
 
-  get lastName() {
-    return this.riderCreationForm.get('lastName');
-  }
-
-  get phoneNumber() {
-    return this.riderCreationForm.get('phoneNumber');
-  }
-
-  get address() {
-    return this.riderCreationForm.get('address');
-  }
-
-  get sector() {
-    return this.riderCreationForm.get('sector');
-  }
-
-  get cnicNumber() {
-    return this.riderCreationForm.get('cnicNumber');
-  }
-
-  get street() {
-    return this.riderCreationForm.get('street');
-  }
-
-  get email() {
-    return this.riderCreationForm.get('email');
-  }
-
-  get role() {
-    return this.riderCreationForm.get('role');
-  }
-
-  get organization() {
-    return this.riderCreationForm.get('organization');
-  }
-  
-  get organizationId() {
-    return this.riderCreationForm.get('organizationId');
-  }
-
-  get password() {
-    return this.riderCreationForm.get('password');
-  }
-
-  setOrganizationId(organization: string) {
-    switch (organization) {
-      case 'emaanDairy':
-        this.riderCreationForm.get('organizationId')?.setValue(1);
-        break;
-
-      case 'newDairy':
-        this.riderCreationForm.get('organizationId')?.setValue(2);
-        break;
-      default:
-        this.riderCreationForm.get('organizationId')?.setValue(null);
-        break;
-    }
-  }
-
-  onRiderCreate() {
-    if (this.riderCreationForm.valid) {
-      const riderCreateData: createRider = this.riderCreationForm.value;
-
-      this.riderService.createAsRider(riderCreateData).subscribe({
-        next: (response) => {
-          console.log(
-            'The Rider is created succesfully in the MTU backend',
-            response
-          );
-        },
-      });
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

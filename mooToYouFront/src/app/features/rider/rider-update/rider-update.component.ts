@@ -1,42 +1,34 @@
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { ERole } from '../../shared/enums/roles.enum';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { catchError, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { RiderService } from '../services/rider.service';
-import { catchError, of, switchMap } from 'rxjs';
-import { response } from 'express';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ERole } from '../../shared/enums/roles.enum';
+import { Rider } from '../interfaces/rider.interface';
 
-export interface User {
-  id: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  address: string;
-  sector: string;
-  street: string;
-  cnicNumber: string;
-  email: string;
-  role: string;
-  organization: string;
-  organizationId: number;
-}
+import { NotificationService } from '../../shared/services/notification.service';
+import { LoggerService } from '../../shared/services/logger.service';
+import { FormBaseService } from '../services/form-base.service';
+
+/**
+ * RiderUpdateComponent
+ * ---------------------
+ * Handles loading and updating a rider's details via a reactive form.
+ * Extends shared form logic from FormBaseService.
+ * Includes error handling, notifications, and cleanup on destroy.
+ */
 
 @Component({
   selector: 'app-rider-update',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -46,138 +38,160 @@ export interface User {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './rider-update.component.html',
   styleUrl: './rider-update.component.css',
 })
-export class RiderUpdateComponent implements OnInit {
+export class RiderUpdateComponent
+  extends FormBaseService
+  implements OnInit, OnDestroy
+{
+  // Destroy subject to manage subscriptions and cleanup
+  private destroy$ = new Subject<void>();
+
+  // Flag to show loading spinner during async operations
   isLoading = false;
-  riderId!:number;
+
+   // To hold the rider's ID fetched from route parameters
+  riderId!: number;
+
+    // Roles enumeration to be used in the form
   roles = Object.values(ERole);
 
-  riderUpdateForm!: FormGroup;
-
-  constructor(private fb: FormBuilder, private riderService:RiderService, private snackbar: MatSnackBar, private router:Router, private route:ActivatedRoute) {
-    this.createForm();
+  constructor(
+    fb: FormBuilder,
+    private riderService: RiderService,
+    private router: Router,
+    private route: ActivatedRoute,
+    notification: NotificationService,
+    logger: LoggerService
+  ) {
+    // Calling the parent class constructor for form handling
+    super(fb, notification, logger);
   }
 
   ngOnInit(): void {
-    this.route.params.pipe(
-      switchMap(params=>{
-        this.riderId=+params['id'];
-        return this.riderService.getRider(this.riderId);
-      }),
-      catchError(error=>{
-        this.snackbar.open('Error loading rider data','close',{duration:3000});
-        this.router.navigate(['/riders']);
-        return of(null);
-      })
-    ).subscribe((rider:User | null)=>{
-      if(rider)
-      {
-        this.populateForm(rider)
-      }
-    })
+    this.setupOrganizationListener();
+    this.loadRiderData(); // Load the rider data based on the route parameter
   }
 
-  private createForm() {
-    this.riderUpdateForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(5)]],
-      firstName: ['', [Validators.required, Validators.minLength(5)]],
-      lastName: ['', [Validators.required, Validators.minLength(5)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{11}$')]],
-      address: ['', [Validators.maxLength(50)]],
-      sector: ['', [Validators.maxLength(10)]],
-      street: [''],
-      cnicNumber: ['', [
-        Validators.pattern('^[0-9]{5}-[0-9]{7}-[0-9]$')
-      ]],
-      email: ['', [
-        Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')
-      ]],
-      role: ['', Validators.required],
-      organization: ['', Validators.required],
-      organizationId: ['']
+  
+  /**
+   * This method loads rider data using the rider's ID from the route parameters.
+   * It uses the RiderService to fetch the data and updates the form accordingly.
+   */
+
+  private loadRiderData(): void {
+    this.route.params
+      .pipe(
+        switchMap((params) => {
+          this.riderId = +params['id'];
+          return this.riderService.getRider(this.riderId);
+        }),
+        catchError((error) => {
+          this.handleLoadError(error);
+          return of(null);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((rider: Rider | null) => {
+        if (rider) this.populateForm(rider);
+      });
+  }
+
+  /**
+   * This method populates the form with the fetched rider data.
+   */
+
+  private populateForm(rider: Rider): void {
+    this.form.patchValue({
+      ...rider,
+      role: rider.role,
+      organization: rider.organization,
     });
   }
 
-  private populateForm(rider:User)
-  {
-    this.riderUpdateForm.patchValue({
-      username:rider.username,
-      firstName:rider.firstName,
-      lastName:rider.lastName,
-      phoneNumber:rider.phoneNumber,
-      address:rider.address,
-      sector:rider.sector,
-      street:rider.street,
-      cnicNumber:rider.cnicNumber,
-      email:rider.email,
-      role:rider.email,
-      organization:rider.organization,
-      organizationId:rider.organizationId
-    })
+  /**
+   * Method called when the user submits the form to update the rider.
+   * It validates the form and sends the update request to the service.
+   */
+
+  onRiderUpdate(): void {
+    if (!super.validateForm('updating rider')) return; // Validate the form before proceeding
+
+    this.isLoading = true;
+
+     // Call the update method in RiderService with the form values and rider ID
+    this.riderService
+      .updateRider(this.form.value, this.riderId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.handleUpdateSuccess(),
+        error: (err) => {
+          this.isLoading = false;
+          super.handleFormError(err, 'Rider update');
+        },
+      });
   }
 
-  // Getter methods for form controls
+  /**
+   * Handles the error when the rider data fails to load.
+   * It logs the error, shows a notification, and navigates back to the riders list.
+   */
+
+  private handleLoadError(error: any): void {
+    this.isLoading = false; // Hide loading spinner
+    this.logger.error('Failed to load rider data', error);
+    this.notification.show('Error loading rider information');
+    this.router.navigate(['/riders']);
+  }
+
+   /**
+   * Handles the success response when the rider data is updated successfully.
+   * It shows a success notification and redirects to the riders list.
+   */
+
+  private handleUpdateSuccess(): void {
+    this.isLoading = false;
+    this.notification.show('Rider updated successfully');
+    this.router.navigate(['/riders']);
+  }
+
+ // Getter methods to simplify access to form controls in the template
   get username() {
-    return this.riderUpdateForm.get('username');
+    return this.form.get('username');
   }
   get firstName() {
-    return this.riderUpdateForm.get('firstName');
+    return this.form.get('firstName');
   }
   get lastName() {
-    return this.riderUpdateForm.get('lastName');
+    return this.form.get('lastName');
   }
   get phoneNumber() {
-    return this.riderUpdateForm.get('phoneNumber');
+    return this.form.get('phoneNumber');
   }
   get address() {
-    return this.riderUpdateForm.get('address');
+    return this.form.get('address');
   }
   get sector() {
-    return this.riderUpdateForm.get('sector');
+    return this.form.get('sector');
   }
   get street() {
-    return this.riderUpdateForm.get('street');
+    return this.form.get('street');
   }
   get cnicNumber() {
-    return this.riderUpdateForm.get('cnicNumber');
+    return this.form.get('cnicNumber');
   }
   get email() {
-    return this.riderUpdateForm.get('email');
-  }
-  get password() {
-    return this.riderUpdateForm.get('password');
+    return this.form.get('email');
   }
   get role() {
-    return this.riderUpdateForm.get('role');
+    return this.form.get('role');
   }
 
-  onRiderUpdate()
-   {
-    if(this.riderUpdateForm.valid)
-    {
-      this.isLoading=true;
-      const updateRider = this.riderUpdateForm.value;
-
-      this.riderService.updateRider(this.riderId,updateRider).pipe(
-        catchError(error=>{
-          this.snackbar.open('Error updating rider','close',{duration:3000});
-          return of(null);
-        })
-      ).subscribe(response=>{
-        this.isLoading=false;
-        if(response)
-        {
-          this.snackbar.open('Rider updated successfully','closed',{duration:3000})
-          this.router.navigate(['/riders'])
-        }
-      })
-    }else
-    {
-      this.snackbar.open('Pleae fix the form errors before Submitting ', 'close', {duration:3000})
-    }
-   }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
