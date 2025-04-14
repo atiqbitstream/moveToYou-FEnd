@@ -4,7 +4,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class loggerService {
+export class LoggerService {
   log(message: string, ...optionalParams: any[]) {
     if (!environment.production) {
       console.log(`[LOG] ${message}`, ...optionalParams);
