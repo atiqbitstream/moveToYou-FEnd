@@ -124,7 +124,7 @@ export class RiderUpdateComponent
 
      // Call the update method in RiderService with the form values and rider ID
     this.riderService
-      .updateRider(this.form.value, this.riderId)
+      .updateRider(this.riderId,this.form.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.handleUpdateSuccess(),

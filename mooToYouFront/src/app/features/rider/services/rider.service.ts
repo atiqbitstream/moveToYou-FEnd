@@ -7,13 +7,14 @@ import { RiderCreateRes } from "../interfaces/riderResponse.interface";
 import { Observable } from "rxjs";
 import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
-import { User } from "../rider-update/rider-update.component";
+
 import { Customer } from "../../customer/customer-update/customer-update.component";
 import {RouteASC} from "../daily-delivery/daily-delivery.component"
 import {  DailyDeliveryWithCustomer, DailyDeliveryWithCustomernDeliveryItems } from "../daily-delivery/daily-delivery.component";
 
 import { FormArray } from "@angular/forms";
 import { Product, CreateDeliveryItems } from "../../shared/models/types";
+import { User } from "../interfaces/user.interface";
 
 @Injectable({providedIn:"root"})
 export class RiderService
@@ -32,9 +33,9 @@ export class RiderService
      })
   }
 
-  getRider(riderId:number):Observable<User | null>
+  getRider(riderId:number):Observable<Rider | null>
   {
-   return this.http.get<User | null>(`${environment.snbUrl}/user/getAsRider`,{
+   return this.http.get<Rider | null>(`${environment.snbUrl}/user/getAsRider`,{
     params:{riderId:riderId}
    })
   }

@@ -17,10 +17,10 @@ import { Router, RouterModule } from '@angular/router';
 import { RiderService } from '../services/rider.service';
 import { DeliveryItemUtils } from '../../shared/utils/delivery-item.utils';
 import { CreateDeliveryItems, Product } from '../../shared/models/types';
-import { loggerService } from '../../shared/services/logger.service';
 import { NotificationService } from '../../shared/services/notification.service';
 import { AppRoutes } from '../../shared/constants/app.constants';
 import { NotificationMessages } from '../../shared/constants/messages.constants';
+import { LoggerService } from '../../shared/services/logger.service';
 
 @Component({
   selector: 'app-delivery-item',
@@ -59,7 +59,7 @@ export class DeliveryItemComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private riderService: RiderService,
-    private logger: loggerService,
+    private logger: LoggerService,
     private notify: NotificationService
   ) {
     // Check if dailyDeliveryId is passed via navigation state
