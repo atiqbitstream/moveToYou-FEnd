@@ -5,17 +5,24 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class LoggerService {
-  log(message: string, ...optionalParams: any[]) {
+  log(message: string, ...optionalParams: any[]):void {
     if (!environment.production) {
       console.log(`[LOG] ${message}`, ...optionalParams);
     }
   }
 
-  warn(message: string, ...optionalParams: any[]) {
+  info(message:string, ...optionalParams:any[]):void{
+    if(!environment.production){
+      console.info(`[INFO]: ${message}`, ...optionalParams);
+    }
+  }
+  
+
+  warn(message: string, ...optionalParams: any[]):void {
     console.warn(`[WARN] ${message}`, ...optionalParams);
   }
 
-  error(message: string, error?: any) {
-    console.error(`[ERROR] ${message}`, error);
+  error(message: string, ...optionalParams:any[]):void {
+    console.error(`[ERROR] ${message}`,...optionalParams);
   }
 }
