@@ -1,25 +1,27 @@
+import { RouteOrderItem } from './../interfaces/types';
 
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { createRider } from "../interfaces/riderCreate.interface";
 import { environment } from "../../../../environments/environment";
 import { RiderCreateRes } from "../interfaces/riderResponse.interface";
-import { Observable } from "rxjs";
+import { catchError, Observable, tap, throwError } from "rxjs";
 import { Rider } from "../interfaces/rider.interface";
 import { LoginService } from "../../login/services/login.service";
 
 import { Customer } from "../../customer/customer-update/customer-update.component";
-import {RouteASC} from "../daily-delivery/daily-delivery.component"
-import {  DailyDeliveryWithCustomer, DailyDeliveryWithCustomernDeliveryItems } from "../daily-delivery/daily-delivery.component";
+
 
 import { FormArray } from "@angular/forms";
 import { Product, CreateDeliveryItems } from "../../shared/models/types";
 import { User } from "../interfaces/user.interface";
+import { DailyDelivery, DailyDeliverynCustomer } from "../interfaces/types";
+import { LoggerService } from "../../shared/services/logger.service";
 
 @Injectable({providedIn:"root"})
 export class RiderService
 {
-  constructor(private http:HttpClient, private loginService:LoginService){}
+  constructor(private http:HttpClient, private loginService:LoginService, private logger:LoggerService){}
 
   createAsRider(newRider:createRider):Observable<RiderCreateRes>
   {
@@ -60,15 +62,32 @@ export class RiderService
     return this.http.post(`${environment.mtuUrl}/rider/createDailyDelivery`,{customerId})
   }
 
-  getDailyDelveries():Observable<DailyDeliveryWithCustomer[]>
+  getDailyDelveries():Observable<DailyDeliverynCustomer[]>
   {
-    return this.http.get<DailyDeliveryWithCustomer[]>(`${environment.mtuUrl}/rider/getDailyDelivery`);
+    return this.http.get<DailyDeliverynCustomer[]>(`${environment.mtuUrl}/rider/getDailyDelivery`);
   }
 
-  getDailyDelveriesWithItems():Observable<DailyDeliveryWithCustomernDeliveryItems[]>
-  {
-    return this.http.get<DailyDeliveryWithCustomernDeliveryItems[]>(`${environment.mtuUrl}/rider/getDailyDeliveryWithItems`)
+  getDailyDelveriesWithItems(): Observable<DailyDelivery[]> {
+    const url = `${environment.mtuUrl}/rider/getDailyDeliveryWithItems`;
+    this.logger.info('Fetching daily deliveries with items from', url);
+
+    return this.http.get<DailyDelivery[]>(url).pipe(
+      tap((deliveries) => {
+        this.logger.info('Fetched daily deliveries successfully', {
+          count: deliveries.length,
+          url,
+        });
+      }),
+      catchError((error) => {
+        this.logger.error('Failed to fetch daily deliveries', {
+          url,
+          error,
+        });
+        return throwError(() => error);
+      })
+    );
   }
+
 
   getProducts():Observable<Product[]>
   {
@@ -82,8 +101,33 @@ export class RiderService
   }
 
 
-  updateRouteOrder(newRouteData:RouteASC[])
-  {
-return this.http.patch<RouteASC>(`${environment.mtuUrl}/rider/updateRoutes`,newRouteData)
-  }
+//   updateRouteOrder(newRouteData:RouteOrderItem[])
+//   {
+// return this.http.patch<RouteOrderItem>(`${environment.mtuUrl}/rider/updateRoutes`,newRouteData)
+//   }
+
+updateRouteOrder(newRouteData: RouteOrderItem[]): Observable<RouteOrderItem> {
+  const url = `${environment.mtuUrl}/rider/updateRoutes`;
+  this.logger.info('Sending route update request', {
+    url,
+    payload: newRouteData,
+  });
+
+  return this.http.patch<RouteOrderItem>(url, newRouteData).pipe(
+    tap(() => {
+      this.logger.info('Route order updated successfully', {
+        url,
+        payloadSize: newRouteData.length,
+      });
+    }),
+    catchError((error) => {
+      this.logger.error('Failed to update route order', {
+        url,
+        error,
+      });
+      return throwError(() => error);
+    })
+  );
+}
+
 }
